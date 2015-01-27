@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/qt-pods.png</file>
+    </qresource>
+</RCC>
