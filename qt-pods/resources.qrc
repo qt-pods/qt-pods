@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/icons">
         <file>icons/qt-pods.png</file>
+        <file>icons/system-upgrade.svg</file>
+        <file>icons/stock_close.svg</file>
+        <file>icons/document-open.svg</file>
+        <file>icons/list-add.svg</file>
     </qresource>
 </RCC>
