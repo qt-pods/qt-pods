@@ -19,14 +19,24 @@ public:
 
 public slots:
     void on_toolButtonRepository_clicked();
+    void on_pushButtonRemoveRepository_clicked();
 
     void on_lineEditSearchLocal_textChanged(QString text);
     void on_lineEditSearchRemote_textChanged(QString text);
 
+    void on_comboBoxCurrentRepository_currentTextChanged(QString text);
+
     void on_pushButtonRemoveLocalPods_clicked();
     void on_pushButtonUpdateLocalPods_clicked();
 
+protected:
+    void closeEvent(QCloseEvent *closeEvent);
+
 private:
+    void loadSettings();
+    void saveSettings();
+
+    bool isValidGitRepository(QString path);
     void configureForRepository(QString path);
 
     PodsModel *_localPods;
