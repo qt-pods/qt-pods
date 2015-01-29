@@ -1,5 +1,7 @@
 # qt-pods
 
+![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
+
 qt-pods is an attempt to unify the packaging of fragments of Qt sources.
 Inspired by the cocoapods project, each fragment follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
