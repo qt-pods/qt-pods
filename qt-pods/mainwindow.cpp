@@ -124,7 +124,21 @@ void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
 }
 
 void MainWindow::on_pushButtonInstallPods_clicked() {
+    QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
+    QList<PodManager::Pod> pods;
+    foreach(QModelIndex modelIndex, modelIndices) {
+        PodManager::Pod pod;
+        pod.name = _remotePods->item(modelIndex.row(), 0)->text();
+        pod.url = _remotePods->item(modelIndex.row(), 1)->text();
+        pods.append(pod);
+    }
 
+    foreach(PodManager::Pod pod, pods) {
+        _podManager.addPod(ui->comboBoxCurrentRepository->currentText(), pod);
+    }
+
+    refreshLocalPods();
+    ui->tabWidgetPods->setCurrentIndex(0);
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
