@@ -38,7 +38,7 @@ public:
 
     bool isValidRepository(QString repository);
 
-    void addPod(QString repository, Pod pod);
+    void installPod(QString repository, Pod pod);
     void removePod(QString repository, QString podName);
 
     void updatePods(QString repository);
@@ -46,6 +46,8 @@ public:
     QList<Pod> installedPods(QString repository);
 
     QList<Pod> availablePods(QStringList sources);
+
+    void generatePodsPri(QString repository);
 
 private:
     QNetworkAccessManager _networkAccessManager;

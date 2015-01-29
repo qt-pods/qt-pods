@@ -39,7 +39,7 @@ bool PodManager::isValidRepository(QString repository) {
     return QFile::exists(gitPath);
 }
 
-void PodManager::addPod(QString repository, Pod pod) {
+void PodManager::installPod(QString repository, Pod pod) {
     if(!isValidRepository(repository)) {
         return;
     }
@@ -50,6 +50,8 @@ void PodManager::addPod(QString repository, Pod pod) {
     QProcess::execute(QString("git submodule add %1 %2").arg(pod.url).arg(pod.name));
 
     QDir::setCurrent(cwd.absolutePath());
+
+    generatePodsPri(repository);
 }
 
 void PodManager::removePod(QString repository, QString podName) {
@@ -74,13 +76,16 @@ void PodManager::removePod(QString repository, QString podName) {
         QProcess::execute(QString("git rm -rf %1/%2").arg(repository).arg(podName));
 
         QDir::setCurrent(cwd.absolutePath());
+
+        generatePodsPri(repository);
     }
 }
 
 void PodManager::updatePods(QString repository) {
     Q_UNUSED(repository);
-}
 
+    generatePodsPri(repository);
+}
 
 QList<PodManager::Pod> PodManager::installedPods(QString repository) {
     QList<Pod> pods;
@@ -133,5 +138,31 @@ QList<PodManager::Pod> PodManager::availablePods(QStringList sources) {
         }
     }
     return pods;
+}
+
+
+void PodManager::generatePodsPri(QString repository) {
+    QList<Pod> pods = installedPods(repository);
+    QString header = "# Auto-generated. Do not edit.\n";
+    QString includePath = "INCLUDEPATH += ";
+    QString libs = "LIBS += ";
+    QString includePris = "";
+    foreach(Pod pod, pods) {
+        includePath += QString("\\\n\t../%1 ").arg(pod.name);
+        libs += QString("\\\n\t-L../%1 -l%1 ").arg(pod.name);
+        includePris += QString("include(../%1/%1.pri)\n").arg(pod.name);
+    }
+
+    QString podsPri = QString("%1\n%2\n\n%3\n\n%4\n")
+        .arg(header)
+        .arg(includePath)
+        .arg(libs)
+        .arg(includePris);
+
+    QFile file(QDir(repository).filePath("pods.pri"));
+    if(file.open(QFile::ReadWrite)) {
+        file.write(podsPri.toUtf8());
+        file.close();
+    }
 }
 

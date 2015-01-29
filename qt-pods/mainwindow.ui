@@ -153,7 +153,7 @@
           <item>
            <widget class="QPushButton" name="pushButtonUpdateLocalPods">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Update</string>
