@@ -140,7 +140,6 @@ QList<PodManager::Pod> PodManager::availablePods(QStringList sources) {
     return pods;
 }
 
-
 void PodManager::generatePodsPri(QString repository) {
     QList<Pod> pods = installedPods(repository);
     QString header = "# Auto-generated. Do not edit.\n";
@@ -164,5 +163,15 @@ void PodManager::generatePodsPri(QString repository) {
         file.write(podsPri.toUtf8());
         file.close();
     }
+}
+
+bool PodManager::checkPod(QString repository, QString podName) {
+    QDir dir(repository);
+    return (podName == podName.toLower()) &&
+        dir.cd(podName) &&
+        QFile::exists(dir.filePath("LICENSE")) &&
+        QFile::exists(dir.filePath("README.md")) &&
+        QFile::exists(dir.filePath(podName + ".pri")) &&
+        QFile::exists(dir.filePath(podName + ".pro"));
 }
 

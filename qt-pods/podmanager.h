@@ -49,6 +49,18 @@ public:
 
     void generatePodsPri(QString repository);
 
+    /**
+     * Checks whether an installed pods is a valid pod, ie.
+     * - pod name is all lowercase
+     * - pod exists
+     * - pod contains pro and pri
+     * - pod contains LICENSE and README.md
+     * @param repository
+     * @param podName
+     * @return
+     */
+    bool checkPod(QString repository, QString podName);
+
 private:
     QNetworkAccessManager _networkAccessManager;
 };

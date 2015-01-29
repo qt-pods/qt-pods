@@ -154,7 +154,7 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
     }
 
     foreach(PodManager::Pod pod, pods) {
-        _podManager.addPod(ui->comboBoxCurrentRepository->currentText(), pod);
+        _podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod);
     }
 
     refreshLocalPods();
@@ -205,6 +205,13 @@ void MainWindow::refreshLocalPods() {
         QList<QStandardItem*> row;
         row.append(new QStandardItem(pod.name));
         row.append(new QStandardItem(pod.url));
+
+        if(!_podManager.checkPod(repository, pod.name)) {
+            QFont font = row.at(0)->font();
+            font.setItalic(true);
+            row.at(0)->setFont(font);
+            row.at(1)->setFont(font);
+        }
 
         foreach(QStandardItem *item, row) {
             item->setEditable(false);
