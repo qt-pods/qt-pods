@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
-#include <QNetworkAccessManager>
 
 #include "podsmodel.h"
 #include "podmanager.h"
@@ -33,21 +32,17 @@ public slots:
     void on_pushButtonRemoveLocalPods_clicked();
 
     void on_pushButtonRefreshAvailablePods_clicked();
+    void on_pushButtonInstallPods_clicked();
 
 protected:
     void closeEvent(QCloseEvent *closeEvent);
-
-private slots:
-    void requestFinished(QNetworkReply* networkReply);
 
 private:
     void loadSettings();
     void saveSettings();
 
-    bool isValidGitRepository(QString path);
     void refreshLocalPods();
-
-    void updateRemotePods();
+    void refreshAvailablePods();
 
     PodManager _podManager;
     PodsModel *_localPods;
