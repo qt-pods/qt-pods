@@ -168,6 +168,7 @@ void PodManager::generatePodsPri(QString repository) {
         .arg(includePris);
 
     QFile file(QDir(repository).filePath("pods.pri"));
+    file.remove();
     if(file.open(QFile::ReadWrite)) {
         file.write(podsPri.toUtf8());
         file.close();
