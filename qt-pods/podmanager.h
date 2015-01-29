@@ -40,11 +40,9 @@ public:
 
     void installPod(QString repository, Pod pod);
     void removePod(QString repository, QString podName);
-
     void updatePods(QString repository);
 
     QList<Pod> installedPods(QString repository);
-
     QList<Pod> availablePods(QStringList sources);
 
     void generatePodsPri(QString repository);

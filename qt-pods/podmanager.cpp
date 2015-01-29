@@ -82,7 +82,16 @@ void PodManager::removePod(QString repository, QString podName) {
 }
 
 void PodManager::updatePods(QString repository) {
-    Q_UNUSED(repository);
+    if(!isValidRepository(repository)) {
+        return;
+    }
+
+    QDir cwd = QDir::current();
+    QDir::setCurrent(repository);
+
+    QProcess::execute(QString("git submodule foreach git pull"));
+
+    QDir::setCurrent(cwd.absolutePath());
 
     generatePodsPri(repository);
 }
@@ -149,7 +158,7 @@ void PodManager::generatePodsPri(QString repository) {
     foreach(Pod pod, pods) {
         includePath += QString("\\\n\t../%1 ").arg(pod.name);
         libs += QString("\\\n\t-L../%1 -l%1 ").arg(pod.name);
-        includePris += QString("include(../%1/%1.pri)\n").arg(pod.name);
+        includePris += QString("include(%1/%1.pri)\n").arg(pod.name);
     }
 
     QString podsPri = QString("%1\n%2\n\n%3\n\n%4\n")

@@ -133,6 +133,7 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
 
 void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
     _podManager.updatePods(ui->comboBoxCurrentRepository->currentText());
+    refreshLocalPods();
 }
 
 void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
@@ -220,7 +221,6 @@ void MainWindow::refreshLocalPods() {
         _localPods->appendRow(row);
     }
 }
-
 
 void MainWindow::refreshAvailablePods() {
     QStringList sources;
