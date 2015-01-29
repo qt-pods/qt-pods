@@ -4,6 +4,10 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <QDebug>
 
@@ -29,7 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewLocal->setModel(_localPodsProxyModel);
     ui->tableViewRemote->setModel(_remotePodsProxyModel);
 
+    connect(&_networkAccessManager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(requestFinished(QNetworkReply*)));
+
     loadSettings();
+    updateRemotePods();
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +61,7 @@ void MainWindow::on_toolButtonRepository_clicked() {
 
         saveSettings();
 
-        configureForRepository(directory);
+        refreshLocalPods();
     }
 }
 
@@ -69,7 +77,8 @@ void MainWindow::on_pushButtonRemoveRepository_clicked() {
 }
 
 void MainWindow::on_comboBoxCurrentRepository_currentTextChanged(QString text) {
-    configureForRepository(text);
+    Q_UNUSED(text);
+    refreshLocalPods();
 }
 
 void MainWindow::on_lineEditSearchLocal_textChanged(QString text) {
@@ -101,7 +110,11 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
     }
 
     if(confirmationResult == QMessageBox::Yes) {
-
+        foreach(QModelIndex modelIndex, modelIndices) {
+            _podManager.removePod(ui->comboBoxCurrentRepository->currentText(),
+                                  _localPods->item(modelIndex.row(), 0)->text());
+        }
+        refreshLocalPods();
     }
 }
 
@@ -109,9 +122,38 @@ void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
 
 }
 
+void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
+
+}
+
+void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
+
+}
+
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
     saveSettings();
     QMainWindow::closeEvent(closeEvent);
+}
+
+void MainWindow::requestFinished(QNetworkReply* networkReply) {
+    if(networkReply) {
+        QJsonDocument document = QJsonDocument::fromJson(networkReply->readAll());
+        QJsonObject object = document.object();
+        QStringList keys = object.keys();
+
+        _remotePods->reset();
+        foreach(QString key, keys) {
+            QList<QStandardItem*> row;
+            row.append(new QStandardItem(key));
+            row.append(new QStandardItem(object.value(key).toString()));
+
+            foreach(QStandardItem *item, row) {
+                item->setEditable(false);
+            }
+
+            _remotePods->appendRow(row);
+        }
+    }
 }
 
 void MainWindow::loadSettings() {
@@ -139,13 +181,14 @@ bool MainWindow::isValidGitRepository(QString path) {
     return QFile::exists(gitPath);
 }
 
-void MainWindow::configureForRepository(QString path) {
-    if(!isValidGitRepository(path)) {
+void MainWindow::refreshLocalPods() {
+    QString repository = ui->comboBoxCurrentRepository->currentText();
+    if(!isValidGitRepository(repository)) {
         QMessageBox::warning(this,
             tr("Invalid repository"),
             tr("The directory you supplied does not appear to be the root of a valid git repository."));
 
-        while(int index = ui->comboBoxCurrentRepository->findText(path)) {
+        while(int index = ui->comboBoxCurrentRepository->findText(repository)) {
             ui->comboBoxCurrentRepository->removeItem(index);
         }
         return;
@@ -154,30 +197,22 @@ void MainWindow::configureForRepository(QString path) {
     // Clear model
     _localPods->reset();
 
-    QDir dir(path);
-    QString gitmodulesPath = dir.filePath(".gitmodules");
-    if(QFile::exists(gitmodulesPath)) {
-        QSettings gitmodules(gitmodulesPath, QSettings::IniFormat);
-        QStringList childGroups = gitmodules.childGroups();
-        foreach(QString childGroup, childGroups) {
-            if(childGroup.startsWith("submodule")) {
-                gitmodules.beginGroup(childGroup);
+    QList<PodManager::Pod> pods = _podManager.installedPods(repository);
+    foreach(PodManager::Pod pod, pods) {
+        QList<QStandardItem*> row;
+        row.append(new QStandardItem(pod.name));
+        row.append(new QStandardItem(pod.url));
 
-                QString podName = gitmodules.value("path").toString();
-                QString podUrl  = gitmodules.value("url").toString();
-
-                QList<QStandardItem*> row;
-                row.append(new QStandardItem(podName));
-                row.append(new QStandardItem(podUrl));
-
-                foreach(QStandardItem *item, row) {
-                    item->setEditable(false);
-                }
-
-                _localPods->appendRow(row);
-
-                gitmodules.endGroup();
-            }
+        foreach(QStandardItem *item, row) {
+            item->setEditable(false);
         }
+
+        _localPods->appendRow(row);
     }
+}
+
+void MainWindow::updateRemotePods() {
+    QNetworkRequest request;
+    request.setUrl(QUrl("https://github.com/cybercatalyst/qt-pods-master/blob/master/pods.json"));
+    _networkAccessManager.get(request);
 }
