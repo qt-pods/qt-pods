@@ -68,9 +68,11 @@ void MainWindow::on_toolButtonRepository_clicked() {
             return;
         }
 
-        if(!ui->comboBoxCurrentRepository->findText(directory)) {
+        if(ui->comboBoxCurrentRepository->findText(directory) == -1) {
             ui->comboBoxCurrentRepository->addItem(directory);
         }
+
+        ui->comboBoxCurrentRepository->setCurrentText(directory);
 
         saveSettings();
 
