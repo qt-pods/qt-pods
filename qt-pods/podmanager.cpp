@@ -53,23 +53,6 @@ void PodManager::installPod(QString repository, Pod pod) {
 
     QDir::setCurrent(cwd.absolutePath());
 
-    // Inject the "pod" flag into .gitmodules
-    QDir dir(repository);
-    QString gitmodulesPath = dir.filePath(".gitmodules");
-    if(QFile::exists(gitmodulesPath)) {
-        QSettings gitmodules(gitmodulesPath, QSettings::IniFormat);
-        QStringList childGroups = gitmodules.childGroups();
-        foreach(QString childGroup, childGroups) {
-            if(childGroup.startsWith("submodule")) {
-                gitmodules.beginGroup(childGroup);
-                if(gitmodules.value("path").toString() == pod.name) {
-                    gitmodules.setValue("pod", true);
-                }
-                gitmodules.endGroup();
-            }
-        }
-    }
-
     generatePodsPri(repository);
 }
 
@@ -125,12 +108,10 @@ QList<Pod> PodManager::installedPods(QString repository) {
         foreach(QString childGroup, childGroups) {
             if(childGroup.startsWith("submodule")) {
                 gitmodules.beginGroup(childGroup);
-                if(gitmodules.contains("pod")) {
-                    Pod pod;
-                    pod.name = gitmodules.value("path").toString();
-                    pod.url  = gitmodules.value("url").toString();
-                    pods.append(pod);
-                }
+                Pod pod;
+                pod.name = gitmodules.value("path").toString();
+                pod.url  = gitmodules.value("url").toString();
+                pods.append(pod);
                 gitmodules.endGroup();
             }
         }
@@ -139,17 +120,31 @@ QList<Pod> PodManager::installedPods(QString repository) {
 }
 
 QList<Pod> PodManager::availablePods(QStringList sources) {
+    if(_networkAccessManager.networkAccessible() == QNetworkAccessManager::NotAccessible) {
+        qDebug() << "No network connection available.";
+        return QList<Pod>();
+    }
+
+    qDebug() << "Updating available pods.";
     QList<Pod> pods;
     foreach(QString source, sources) {
+        qDebug() << "Updating from source: " << source;
+
         QNetworkRequest request;
         request.setUrl(QUrl(source));
         QNetworkReply *reply = _networkAccessManager.get(request);
-
         QEventLoop loop;
         connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
         loop.exec();
 
         QByteArray response = reply->readAll();
+
+        if(reply->error() != QNetworkReply::NoError) {
+            qDebug() << reply->errorString();
+        } else {
+            qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
+        }
+
         QJsonParseError parseError;
         QJsonDocument document = QJsonDocument::fromJson(response, &parseError);
 
@@ -162,6 +157,7 @@ QList<Pod> PodManager::availablePods(QStringList sources) {
                 pod.name = key;
                 pod.url = object.value(key).toString();
                 pods.append(pod);
+                qDebug() << "Found pod: " << pod.name;
             }
         } else {
             qDebug() << source << " is a malformed source: " << parseError.errorString();

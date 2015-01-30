@@ -9,5 +9,8 @@
         <file>icons/rotate.svg</file>
         <file>icons/file-manager.svg</file>
         <file>icons/remove.svg</file>
+        <file>icons/computer.svg</file>
+        <file>icons/network_local.svg</file>
+        <file>icons/gnome-system.svg</file>
     </qresource>
 </RCC>

@@ -27,6 +27,8 @@
 // Qt includes
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
+#include <QSystemTrayIcon>
+#include <QSocketNotifier>
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +40,8 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    void setupStdOutRedirect();
 
 public slots:
     void on_toolButtonRepository_clicked();
@@ -58,12 +62,19 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *closeEvent);
 
+private slots:
+    void stdOutActivated(int fileDescriptor);
+
 private:
     void loadSettings();
     void saveSettings();
 
     void refreshLocalPods();
     void refreshAvailablePods();
+
+
+    QSocketNotifier *_stdOutSocketNotifier;
+    QSystemTrayIcon _systemTrayIcon;
 
     PodManager _podManager;
     PodsModel *_localPods;

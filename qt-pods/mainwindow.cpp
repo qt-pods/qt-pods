@@ -30,9 +30,16 @@
 #include <QMessageBox>
 #include <QDebug>
 
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
+    setObjectName("MainWindow");
+    setupStdOutRedirect();
+
     ui->setupUi(this);
 
     _localPods = new PodsModel();
@@ -49,12 +56,41 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableViewLocal->setModel(_localPodsProxyModel);
     ui->tableViewRemote->setModel(_remotePodsProxyModel);
 
+    _systemTrayIcon.setIcon(QIcon(":/icons/icons/system-upgrade.svg"));
+    _systemTrayIcon.setToolTip("Qt Pods");
+    _systemTrayIcon.show();
+
     loadSettings();
     refreshAvailablePods();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::stdOutActivated(int fileDescriptor) {
+    char readBuffer[1024];
+    int numberOfBytesRead = ::read(fileDescriptor, readBuffer, sizeof(readBuffer) - 1);
+    if(numberOfBytesRead > 0) {
+        // Terminate buffer - just in case.
+        readBuffer[numberOfBytesRead] = (char)0;
+
+        ui->plainTextEditDiagnostic->appendPlainText(readBuffer);
+    }
+}
+
+void MainWindow::setupStdOutRedirect() {
+#ifdef Q_OS_UNIX
+    // Redirect our own stdout/stderr.
+    int pipeDescriptors[2];
+    if(::pipe(pipeDescriptors) == 0) {
+        ::dup2(pipeDescriptors[1], STDOUT_FILENO);
+        ::dup2(pipeDescriptors[1], STDERR_FILENO);
+        _stdOutSocketNotifier = new QSocketNotifier(pipeDescriptors[0], QSocketNotifier::Read, this);
+        connect(_stdOutSocketNotifier, SIGNAL(activated(int)),
+                this, SLOT(stdOutActivated(int)));
+    }
+#endif
 }
 
 void MainWindow::on_toolButtonRepository_clicked() {

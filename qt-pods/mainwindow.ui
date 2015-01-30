@@ -36,7 +36,17 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
       <widget class="QWidget" name="tabLocalPods">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/computer.svg</normaloff>:/icons/icons/computer.svg</iconset>
+       </attribute>
        <attribute name="title">
         <string>Local repositories</string>
        </attribute>
@@ -256,6 +266,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tabAvailablePods">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/network_local.svg</normaloff>:/icons/icons/network_local.svg</iconset>
+       </attribute>
        <attribute name="title">
         <string>Available pods</string>
        </attribute>
@@ -403,6 +417,39 @@
            </widget>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabDiagnostic">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/gnome-system.svg</normaloff>:/icons/icons/gnome-system.svg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Diagnostic</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEditDiagnostic">
+          <property name="font">
+           <font>
+            <family>Ubuntu Mono</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPlainTextEdit {
+	background: black;
+	color: white;
+}</string>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="plainText">
+           <string/>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
