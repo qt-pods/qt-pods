@@ -18,21 +18,21 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+// Own includes
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "pod.h"
 
+// Qt includes
 #include <QFileDialog>
 #include <QSettings>
 #include <QStandardPaths>
-
-#include <QDebug>
-
 #include <QMessageBox>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
     _localPods = new PodsModel();
@@ -53,8 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     refreshAvailablePods();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
@@ -139,24 +138,40 @@ void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
 }
 
 void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
+    ui->tableViewLocal->setEnabled(false);
+    ui->pushButtonRemoveLocalPods->setEnabled(false);
+    ui->pushButtonRefreshLocalPods->setEnabled(false);
+
     refreshLocalPods();
+
+    ui->tableViewLocal->setEnabled(true);
+    ui->pushButtonRemoveLocalPods->setEnabled(true);
+    ui->pushButtonRefreshLocalPods->setEnabled(true);
 }
 
 void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
+    ui->tableViewRemote->setEnabled(false);
+    ui->pushButtonInstallPods->setEnabled(false);
+    ui->pushButtonRefreshAvailablePods->setEnabled(false);
+
     refreshAvailablePods();
+
+    ui->tableViewRemote->setEnabled(true);
+    ui->pushButtonInstallPods->setEnabled(true);
+    ui->pushButtonRefreshAvailablePods->setEnabled(true);
 }
 
 void MainWindow::on_pushButtonInstallPods_clicked() {
     QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
-    QList<PodManager::Pod> pods;
+    QList<Pod> pods;
     foreach(QModelIndex modelIndex, modelIndices) {
-        PodManager::Pod pod;
+        Pod pod;
         pod.name = _remotePods->item(modelIndex.row(), 0)->text();
         pod.url = _remotePods->item(modelIndex.row(), 1)->text();
         pods.append(pod);
     }
 
-    foreach(PodManager::Pod pod, pods) {
+    foreach(Pod pod, pods) {
         _podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod);
     }
 
@@ -200,11 +215,11 @@ void MainWindow::refreshLocalPods() {
         return;
     }
 
-    QList<PodManager::Pod> pods = _podManager.installedPods(repository);
+    QList<Pod> pods = _podManager.installedPods(repository);
 
     // Clear model
     _localPods->reset();
-    foreach(PodManager::Pod pod, pods) {
+    foreach(Pod pod, pods) {
         QList<QStandardItem*> row;
         row.append(new QStandardItem(pod.name));
         row.append(new QStandardItem(pod.url));
@@ -228,11 +243,11 @@ void MainWindow::refreshAvailablePods() {
     QStringList sources;
     sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
 
-    QList<PodManager::Pod> pods = _podManager.availablePods(sources);
+    QList<Pod> pods = _podManager.availablePods(sources);
 
     // Clear model
     _remotePods->reset();
-    foreach(PodManager::Pod pod, pods) {
+    foreach(Pod pod, pods) {
         QList<QStandardItem*> row;
         row.append(new QStandardItem(pod.name));
         row.append(new QStandardItem(pod.url));

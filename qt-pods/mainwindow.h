@@ -18,14 +18,15 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
-#include <QMainWindow>
-#include <QSortFilterProxyModel>
-
+// Own includes
 #include "podsmodel.h"
 #include "podmanager.h"
+
+// Qt includes
+#include <QMainWindow>
+#include <QSortFilterProxyModel>
 
 namespace Ui {
 class MainWindow;
@@ -75,5 +76,3 @@ private:
 
     Ui::MainWindow *ui;
 };
-
-#endif // MAINWINDOW_H

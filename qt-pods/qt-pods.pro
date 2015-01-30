@@ -32,7 +32,8 @@ SOURCES += \
 HEADERS += \
     mainwindow.h \
     podsmodel.h \
-    podmanager.h
+    podmanager.h \
+    pod.h
 
 FORMS += mainwindow.ui
 

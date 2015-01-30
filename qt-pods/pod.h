@@ -21,11 +21,9 @@
 #pragma once
 
 // Qt includes
-#include <QStandardItemModel>
+#include <QString>
 
-class PodsModel : public QStandardItemModel {
-public:
-    PodsModel();
-
-    void reset();
+struct Pod {
+    QString name;
+    QString url;
 };

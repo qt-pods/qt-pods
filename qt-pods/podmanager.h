@@ -18,22 +18,19 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef PODMANAGER_H
-#define PODMANAGER_H
+#pragma once
 
+// Own includes
+#include "pod.h"
+
+// Qt includes
 #include <QString>
 #include <QObject>
-
 #include <QNetworkAccessManager>
 
 class PodManager : public QObject {
     Q_OBJECT
 public:
-    struct Pod {
-        QString name;
-        QString url;
-    };
-
     PodManager(QObject *parent = 0);
 
     bool isValidRepository(QString repository);
@@ -42,9 +39,16 @@ public:
     void removePod(QString repository, QString podName);
     void updatePods(QString repository);
 
+    /** @returns a list of all installed pods in a repository. */
     QList<Pod> installedPods(QString repository);
+
+    /** @returns a list of all available pods from the given sources. */
     QList<Pod> availablePods(QStringList sources);
 
+    /**
+     * Regenerates the pods.pri for the given repository.
+     * @param repository
+     */
     void generatePodsPri(QString repository);
 
     /**
@@ -62,5 +66,3 @@ public:
 private:
     QNetworkAccessManager _networkAccessManager;
 };
-
-#endif // PODMANAGER_H

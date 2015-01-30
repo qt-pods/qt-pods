@@ -18,8 +18,10 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+// Own includes
 #include "podmanager.h"
 
+// Qt includes
 #include <QDir>
 #include <QSettings>
 #include <QProcess>
@@ -50,6 +52,23 @@ void PodManager::installPod(QString repository, Pod pod) {
     QProcess::execute(QString("git submodule add %1 %2").arg(pod.url).arg(pod.name));
 
     QDir::setCurrent(cwd.absolutePath());
+
+    // Inject the "pod" flag into .gitmodules
+    QDir dir(repository);
+    QString gitmodulesPath = dir.filePath(".gitmodules");
+    if(QFile::exists(gitmodulesPath)) {
+        QSettings gitmodules(gitmodulesPath, QSettings::IniFormat);
+        QStringList childGroups = gitmodules.childGroups();
+        foreach(QString childGroup, childGroups) {
+            if(childGroup.startsWith("submodule")) {
+                gitmodules.beginGroup(childGroup);
+                if(gitmodules.value("path").toString() == pod.name) {
+                    gitmodules.setValue("pod", true);
+                }
+                gitmodules.endGroup();
+            }
+        }
+    }
 
     generatePodsPri(repository);
 }
@@ -96,7 +115,7 @@ void PodManager::updatePods(QString repository) {
     generatePodsPri(repository);
 }
 
-QList<PodManager::Pod> PodManager::installedPods(QString repository) {
+QList<Pod> PodManager::installedPods(QString repository) {
     QList<Pod> pods;
     QDir dir(repository);
     QString gitmodulesPath = dir.filePath(".gitmodules");
@@ -106,10 +125,12 @@ QList<PodManager::Pod> PodManager::installedPods(QString repository) {
         foreach(QString childGroup, childGroups) {
             if(childGroup.startsWith("submodule")) {
                 gitmodules.beginGroup(childGroup);
-                Pod pod;
-                pod.name = gitmodules.value("path").toString();
-                pod.url  = gitmodules.value("url").toString();
-                pods.append(pod);
+                if(gitmodules.contains("pod")) {
+                    Pod pod;
+                    pod.name = gitmodules.value("path").toString();
+                    pod.url  = gitmodules.value("url").toString();
+                    pods.append(pod);
+                }
                 gitmodules.endGroup();
             }
         }
@@ -117,7 +138,7 @@ QList<PodManager::Pod> PodManager::installedPods(QString repository) {
     return pods;
 }
 
-QList<PodManager::Pod> PodManager::availablePods(QStringList sources) {
+QList<Pod> PodManager::availablePods(QStringList sources) {
     QList<Pod> pods;
     foreach(QString source, sources) {
         QNetworkRequest request;
