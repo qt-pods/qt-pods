@@ -7,6 +7,10 @@ Inspired by the cocoapods project, each "pod" follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
 
+# How to use
+
+[![Tutorial](http://img.youtube.com/vi/P-gA5g9ZP9I/0.jpg)](http://www.youtube.com/watch?v=P-gA5g9ZP9I)
+
 # pod sources
 In order to know which pods are available, you need to specify pod sources.
 Pod sources are simply a json-file that list available pods. Currently, only a
