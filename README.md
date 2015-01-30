@@ -41,16 +41,29 @@ Formalities:
 * The repository must contain a README.md file at root.
 
 # For developers
+
+![Architecture](https://github.com/cybercatalyst/qt-pods/blob/master/architecture.png "Architecture")
+
 Each time you develop an app you will set up a Qt subdirs project.
 Each pod you are using will be added as a git submodule, thus keeping track
 of the commit-exact version of the pods you are using.
 
-qt-pods will generate a pods.pri next to subdirs project. By design, all you need
+qt-pods will generate a pods.pri next to the subdirs project. By design, all you need
 to do is integrating the following statement into your target application's pro file:
 ```
 include(../pods.pri)
 ```
 The pods.pri will set up the include paths, linker flags against pods and even draw in the dependencies of pods via their pris.
+
+Sometimes you want to have submodules that are not pods. In order to allow that, qt-pods manages all subdir targets in a separate file called pods-subdirs.pri.
+Usually, if you start a new project from scratch using qt-pods, qt-pods will take care of that and create a subdirs pro with the repository name and include the
+following statement:
+
+```
+include(pods-subdirs.pri)
+```
+
+If you have an existing project, you need to put in that line manually.
 
 # Compile and install
 Development takes places with the latest version of Qt. Before submitting a bug report, please check whether that occurs
