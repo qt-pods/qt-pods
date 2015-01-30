@@ -1,0 +1,3 @@
+[submodule "qt-pods-core"]
+	path = qt-pods-core
+	url = https://github.com/cybercatalyst/qt-pods-core.git

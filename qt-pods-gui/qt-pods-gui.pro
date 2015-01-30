@@ -20,25 +20,24 @@
 
 QT  += core gui network widgets
 
-TARGET = qt-pods
+TARGET = qt-pods-gui
 TEMPLATE = app
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    podsmodel.cpp \
-    podmanager.cpp
+    podsmodel.cpp
 
 HEADERS += \
     mainwindow.h \
-    podsmodel.h \
-    podmanager.h \
-    pod.h
+    podsmodel.h
 
 FORMS += mainwindow.ui
 
 RESOURCES += \
     resources.qrc
+    
+include(../pods.pri)
 
 # make install
 unix {
