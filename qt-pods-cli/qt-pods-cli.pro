@@ -32,6 +32,9 @@ SOURCES += main.cpp
 
 include(../pods.pri)
 
+GIT_VERSION = $$system(git describe --always --tags)
+DEFINES += GIT_VERSION=\\\"$$GIT_VERSION\\\"
+
 # make install
 unix {
         # variables

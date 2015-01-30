@@ -18,10 +18,67 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
+// Qt includes
 #include <QCoreApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 int main(int argc, char *argv[]) {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName("qt-pods-cli");
+    QCoreApplication::setApplicationVersion(GIT_VERSION);
 
-    return a.exec();
+    QCommandLineParser parser;
+    parser.setApplicationDescription(
+                "Copyright (C) 2015 Jacob Dawid, jacob@omg-it.works\n"
+                "This is free software; see the source code for copying conditions.\n"
+                "There is ABSOLUTELY NO WARRANTY; not even for MERCHANTABILITY or\n"
+                "FITNESS FOR A PARTICULAR PURPOSE.");
+    parser.addHelpOption();
+    parser.addVersionOption();
+//    parser.addPositionalArgument("command", QCoreApplication::translate("main", "Source file to copy."));
+//    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
+
+    QCommandLineOption listOption(QStringList() << "l" << "list",
+            QCoreApplication::translate("main", "Lists all available pods."));
+    parser.addOption(listOption);
+
+    QCommandLineOption searchOption(QStringList() << "s" << "search",
+            QCoreApplication::translate("main", "Searches pods that match <wildcard>."),
+            QCoreApplication::translate("main", "wildcard"));
+    parser.addOption(searchOption);
+
+    QCommandLineOption installOption(QStringList() << "i" << "install",
+            QCoreApplication::translate("main", "Installs the pod <podname>."),
+            QCoreApplication::translate("main", "podname"));
+    parser.addOption(installOption);
+
+    QCommandLineOption removeOption(QStringList() << "r" << "remove",
+            QCoreApplication::translate("main", "Removes the pod <podname>."),
+            QCoreApplication::translate("main", "podname"));
+    parser.addOption(removeOption);
+
+    QCommandLineOption updateOption(QStringList() << "u" << "update",
+            QCoreApplication::translate("main", "Updates the pod <podname>."),
+            QCoreApplication::translate("main", "podname"));
+    parser.addOption(updateOption);
+
+    QCommandLineOption checkOption(QStringList() << "c" << "check",
+            QCoreApplication::translate("main", "Checks <podname>, if it complies to the pod rules."),
+            QCoreApplication::translate("main", "podname"));
+    parser.addOption(checkOption);
+
+    // Process the actual command line arguments given by the user
+    parser.process(app);
+
+//    const QStringList args = parser.positionalArguments();
+//    // source is args.at(0), destination is args.at(1)
+
+//    bool showProgress = parser.isSet(showProgressOption);
+//    bool force = parser.isSet(forceOption);
+//    QString targetDir = parser.value(targetDirectoryOption);
+//    // ...
+
+    parser.showHelp();
+    return 0;
 }
