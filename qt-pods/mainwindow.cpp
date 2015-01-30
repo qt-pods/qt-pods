@@ -245,7 +245,8 @@ void MainWindow::refreshLocalPods() {
             tr("Invalid repository"),
             tr("The directory you supplied does not appear to be the root of a valid git repository."));
 
-        while(int index = ui->comboBoxCurrentRepository->findText(repository)) {
+        int index;
+        while((index = ui->comboBoxCurrentRepository->findText(repository)) != -1) {
             ui->comboBoxCurrentRepository->removeItem(index);
         }
         return;
