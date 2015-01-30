@@ -51,6 +51,10 @@ public:
      */
     void generatePodsPri(QString repository);
 
+    void generatePodsSubdirsPri(QString repository);
+
+    void generateSubdirsPro(QString repository);
+
     /**
      * Checks whether an installed pods is a valid pod, ie.
      * - pod name is all lowercase
