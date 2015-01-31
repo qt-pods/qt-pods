@@ -79,6 +79,16 @@ Run from the command line:
 $ qt-pods
 ```
 
+# How does qt-pods compare to inqlude?
+At first sight these projects are very similar, but they aren't at all. inqlude's mission is to get an overview of libraries.
+Inqlude contains a set of meta-information how a certain library is being installed on a certain system - systemwide.
+Inqlude tries to gracefully wrap around everything to get it working somehow - even if it finally needs to compile libraries from source.
+
+In contradiction, qt-pods' scope is the project. You add pods to a projects and qt-pods will set up a code repository that
+will keep working even when someone who doesn't use qt-pods wants to build your project. Libraries will be put together at
+the time you are cloning a repository, and they will be gone when you don't work on a project anymore. qt-pods expects that pods
+are in a certain format, rather than abstracting away differences through a manifest.
+
 # Disclaimer
 Please be careful. This software is in early state, use it with caution. Make backups of your repositories.
 
