@@ -240,6 +240,7 @@ void MainWindow::loadSettings() {
 
     QStringList repositories = settings.value("local-repositories").toStringList();
     ui->comboBoxCurrentRepository->addItems(repositories);
+    ui->comboBoxCurrentRepository->setCurrentText(settings.value("active-repository").toString());
 }
 
 void MainWindow::saveSettings() {
@@ -250,6 +251,7 @@ void MainWindow::saveSettings() {
         repositories.append(ui->comboBoxCurrentRepository->itemText(i));
     }
     settings.setValue("local-repositories", repositories);
+    settings.setValue("active-repository", ui->comboBoxCurrentRepository->currentText());
     settings.sync();
 }
 
