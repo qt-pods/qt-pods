@@ -224,12 +224,25 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
         pods.append(pod);
     }
 
+    int failureCount = 0;
     foreach(Pod pod, pods) {
-        _podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod);
+        if(!_podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod)) {
+            QMessageBox::critical(this, tr("Error installing pod"), tr("The pod \"%1\" could not be installed.")
+                                  .arg(pod.name));
+            failureCount++;
+        }
     }
 
     refreshLocalPods();
     ui->tabWidgetPods->setCurrentIndex(0);
+
+    if(failureCount == 0) {
+        QMessageBox::information(this, tr("Pods have been installed"), tr("Finished installing %1 pods.")
+                                 .arg(pods.count()));
+    } else {
+        QMessageBox::information(this, tr("Pods have been installed"), tr("Installing %1 pod(s) failed.")
+                                 .arg(failureCount));
+    }
 }
 
 void MainWindow::on_pushButtonInstallExternalPod_clicked() {
@@ -241,7 +254,7 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
             refreshLocalPods();
             ui->tabWidgetPods->setCurrentIndex(0);
         } else {
-            QMessageBox::critical(this, tr("Error install pod"), tr("The pod could not be installed."));
+            QMessageBox::critical(this, tr("Error installing pod"), tr("The pod could not be installed."));
         }
     }
 }
