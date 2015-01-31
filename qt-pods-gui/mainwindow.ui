@@ -23,6 +23,93 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QComboBox" name="comboBoxCurrentRepository">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="editable">
+         <bool>false</bool>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonRemoveRepository">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Untrack selected repository. The repository will not be removed on disk.</string>
+        </property>
+        <property name="text">
+         <string>Untrack repository</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/icons/stock_close.svg</normaloff>:/icons/icons/stock_close.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButtonRepository">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Add a repository to be tracked.</string>
+        </property>
+        <property name="text">
+         <string>Add repository</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/icons/list-add.svg</normaloff>:/icons/icons/list-add.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QTabWidget" name="tabWidgetPods">
       <property name="enabled">
        <bool>true</bool>
@@ -52,95 +139,16 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Repository:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBoxCurrentRepository">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="editable">
-             <bool>false</bool>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonRemoveRepository">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Remove</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/icons/icons/stock_close.svg</normaloff>:/icons/icons/stock_close.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="toolButtonRepository">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Add</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/icons/icons/list-add.svg</normaloff>:/icons/icons/list-add.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextBesideIcon</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <widget class="QTableView" name="tableViewLocal">
+          <property name="toolTip">
+           <string>List of all locally installed pods in the current repository.</string>
+          </property>
+          <property name="statusTip">
+           <string>List of all locally installed pods in the current repository.</string>
+          </property>
+          <property name="whatsThis">
+           <string>List of all locally installed pods in the current repository.</string>
+          </property>
           <property name="alternatingRowColors">
            <bool>false</bool>
           </property>
@@ -187,6 +195,15 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditSearchLocal">
+          <property name="toolTip">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
+          <property name="statusTip">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
           <property name="placeholderText">
            <string>Filter</string>
           </property>
@@ -196,6 +213,15 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QPushButton" name="pushButtonRemoveLocalPods">
+            <property name="toolTip">
+             <string>Remove selected pods from the current repository.</string>
+            </property>
+            <property name="statusTip">
+             <string>Remove selected pods from the current repository.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Remove selected pods from the current repository.</string>
+            </property>
             <property name="text">
              <string>Remove pods</string>
             </property>
@@ -215,6 +241,15 @@
            <widget class="QPushButton" name="pushButtonUpdateLocalPods">
             <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="toolTip">
+             <string>Attempt to update all pods in the current repository.</string>
+            </property>
+            <property name="statusTip">
+             <string>Attempt to update all pods in the current repository.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Attempt to update all pods in the current repository.</string>
             </property>
             <property name="text">
              <string>Update pods</string>
@@ -246,6 +281,15 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonRefreshLocalPods">
+            <property name="toolTip">
+             <string>Refresh list of local repositories manually.</string>
+            </property>
+            <property name="statusTip">
+             <string>Refresh list of local repositories manually.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Refresh list of local repositories manually.</string>
+            </property>
             <property name="text">
              <string>Refresh</string>
             </property>
@@ -296,6 +340,15 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Manage pod sources.</string>
+            </property>
+            <property name="statusTip">
+             <string>Manage pod sources.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Manage pod sources.</string>
+            </property>
             <property name="text">
              <string>Manage Sources</string>
             </property>
@@ -320,6 +373,12 @@
              </size>
             </property>
             <property name="toolTip">
+             <string>Install a pod that is not provided in the sources list.</string>
+            </property>
+            <property name="statusTip">
+             <string>Install a pod that is not provided in the sources list.</string>
+            </property>
+            <property name="whatsThis">
              <string>Install a pod that is not provided in the sources list.</string>
             </property>
             <property name="text">
@@ -354,6 +413,15 @@
         </item>
         <item>
          <widget class="QTableView" name="tableViewRemote">
+          <property name="toolTip">
+           <string>List of all available pods provided by all source.</string>
+          </property>
+          <property name="statusTip">
+           <string>List of all available pods provided by all source.</string>
+          </property>
+          <property name="whatsThis">
+           <string>List of all available pods provided by all source.</string>
+          </property>
           <property name="alternatingRowColors">
            <bool>false</bool>
           </property>
@@ -388,6 +456,15 @@
         </item>
         <item>
          <widget class="QLineEdit" name="lineEditSearchRemote">
+          <property name="toolTip">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
+          <property name="statusTip">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Type to filter the list. You can use wildcards, ie. &quot;pack*&quot;.</string>
+          </property>
           <property name="placeholderText">
            <string>Filter</string>
           </property>
@@ -410,6 +487,15 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonRefreshAvailablePods">
+            <property name="toolTip">
+             <string>Refresh list of available pods manually.</string>
+            </property>
+            <property name="statusTip">
+             <string>Refresh list of available pods manually.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Refresh list of available pods manually.</string>
+            </property>
             <property name="text">
              <string>Refresh</string>
             </property>
@@ -427,6 +513,15 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonInstallPods">
+            <property name="toolTip">
+             <string>Install all selected pods to the current repository.</string>
+            </property>
+            <property name="statusTip">
+             <string>Install all selected pods to the current repository.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Install all selected pods to the current repository.</string>
+            </property>
             <property name="text">
              <string>Install</string>
             </property>
@@ -456,6 +551,61 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Build:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEditBuild">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Ubuntu Mono</family>
+             </font>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonReportIssue">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Report an issue to the qt-pods bugtracker.</string>
+            </property>
+            <property name="statusTip">
+             <string>Report an issue to the qt-pods bugtracker.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Report an issue to the qt-pods bugtracker.</string>
+            </property>
+            <property name="text">
+             <string>Report an issue</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/icons/icons/remove.svg</normaloff>:/icons/icons/remove.svg</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QPlainTextEdit" name="plainTextEditDiagnostic">
           <property name="font">
            <font>
@@ -483,6 +633,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

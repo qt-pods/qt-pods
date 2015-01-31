@@ -60,6 +60,8 @@ public slots:
     void on_pushButtonInstallPods_clicked();
     void on_pushButtonInstallExternalPod_clicked();
 
+    void on_pushButtonReportIssue_clicked();
+
 protected:
     void closeEvent(QCloseEvent *closeEvent);
 
@@ -67,6 +69,7 @@ private slots:
     void stdOutActivated(int fileDescriptor);
 
 private:
+    void updateBuildInfo();
     void loadSettings();
     void saveSettings();
 

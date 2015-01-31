@@ -42,6 +42,9 @@ RESOURCES += \
     
 include(../pods.pri)
 
+GIT_VERSION = $$system(git describe --always --dirty --tags)
+DEFINES += GIT_VERSION=\\\"$$GIT_VERSION\\\"
+
 # make install
 unix {
         # variables

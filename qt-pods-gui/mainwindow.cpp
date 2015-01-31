@@ -29,6 +29,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include <QDebug>
 
 #ifdef Q_OS_UNIX
@@ -61,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _systemTrayIcon.setToolTip("Qt Pods");
     _systemTrayIcon.show();
 
+    updateBuildInfo();
     loadSettings();
     refreshAvailablePods();
 }
@@ -78,6 +80,20 @@ void MainWindow::stdOutActivated(int fileDescriptor) {
 
         ui->plainTextEditDiagnostic->appendPlainText(readBuffer);
     }
+}
+
+void MainWindow::updateBuildInfo() {
+    QString buildString = QString("%1-%2 (built on %3 at %4)")
+            .arg(GIT_VERSION)
+#ifdef QT_DEBUG
+            .arg("debug")
+#else
+            .arg("release")
+#endif
+            .arg(__DATE__)
+            .arg(__TIME__);
+
+    ui->lineEditBuild->setText(buildString);
 }
 
 void MainWindow::setupStdOutRedirect() {
@@ -228,6 +244,11 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
             QMessageBox::critical(this, tr("Error install pod"), tr("The pod could not be installed."));
         }
     }
+}
+
+void MainWindow::on_pushButtonReportIssue_clicked() {
+    QDesktopServices desktopServices;
+    desktopServices.openUrl(QUrl("https://github.com/cybercatalyst/qt-pods/issues"));
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
