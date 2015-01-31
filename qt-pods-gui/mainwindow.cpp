@@ -96,7 +96,7 @@ void MainWindow::setupStdOutRedirect() {
 void MainWindow::on_toolButtonRepository_clicked() {
     QString directory = QFileDialog::getExistingDirectory(this, tr("Add git repository"));
     if(!directory.isEmpty()) {
-        if(!_podManager.isValidRepository(directory)) {
+        if(!_podManager.isGitRepository(directory)) {
             QMessageBox::warning(this,
                 tr("Invalid repository"),
                 tr("The directory you supplied does not appear to be the root of a valid git repository."));
@@ -240,7 +240,7 @@ void MainWindow::saveSettings() {
 
 void MainWindow::refreshLocalPods() {
     QString repository = ui->comboBoxCurrentRepository->currentText();
-    if(!_podManager.isValidRepository(repository)) {
+    if(!_podManager.isGitRepository(repository)) {
         QMessageBox::warning(this,
             tr("Invalid repository"),
             tr("The directory you supplied does not appear to be the root of a valid git repository."));
