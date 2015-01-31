@@ -128,7 +128,7 @@ void MainWindow::on_pushButtonRemoveRepository_clicked() {
 }
 
 void MainWindow::on_comboBoxCurrentRepository_currentTextChanged(QString text) {
-    Q_UNUSED(text);
+    setWindowTitle(QString("Qt Pods - %1").arg(text));
     refreshLocalPods();
 }
 
