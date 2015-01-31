@@ -22,6 +22,14 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QDir>
+#include <QRegExp>
+
+// Own includes
+#include "podmanager.h"
+
+// Standard includes
+#include <iostream>
 
 int main(int argc, char *argv[]) {
     QCoreApplication app(argc, argv);
@@ -40,7 +48,7 @@ int main(int argc, char *argv[]) {
 //    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
 
     QCommandLineOption listOption(QStringList() << "l" << "list",
-            QCoreApplication::translate("main", "Lists all available pods."));
+            QCoreApplication::translate("main", "Lists installed pods."));
     parser.addOption(listOption);
 
     QCommandLineOption searchOption(QStringList() << "s" << "search",
@@ -71,14 +79,100 @@ int main(int argc, char *argv[]) {
     // Process the actual command line arguments given by the user
     parser.process(app);
 
-//    const QStringList args = parser.positionalArguments();
-//    // source is args.at(0), destination is args.at(1)
+    QStringList sources;
+    sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
 
-//    bool showProgress = parser.isSet(showProgressOption);
-//    bool force = parser.isSet(forceOption);
-//    QString targetDir = parser.value(targetDirectoryOption);
-//    // ...
+    PodManager podManager;
+    QString repositoryPath = QDir::current().absolutePath();
+    if(!podManager.isGitRepository(repositoryPath)) {
+        std::cerr << "The current repository is not a git repository." << std::endl;
+        return 1;
+    } else
+    if(parser.isSet(listOption)) {
+        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        foreach(Pod pod, pods) {
+            std::cout << pod.name.toStdString() << std::endl;
+        }
+    } else
+    if(parser.isSet(searchOption)) {
+        QList<Pod> pods = podManager.availablePods(sources);
+        std::cout << "The following pods are available and match your criteria:" << std::endl;
+        QRegExp regExp(parser.value(searchOption), Qt::CaseInsensitive, QRegExp::Wildcard);
+        foreach(Pod pod, pods) {
+            if(pod.name.contains(regExp)) {
+                std::cout << pod.name.toStdString() << std::endl;
+            }
+        }
+    } else
+    if(parser.isSet(installOption)) {
+        QList<Pod> pods = podManager.availablePods(sources);
+        foreach(Pod pod, pods) {
+            if(pod.name == parser.value(installOption)) {
+                bool result = podManager.installPod(repositoryPath, pod);
+                if(result) {
+                    std::cout << "Pod \"" << pod.name.toStdString() << "\" installed successfully." << std::endl;
+                    return 0;
+                } else {
+                    std::cout << "Installing pod failed." << std::endl;
+                    return 2;
+                }
+            }
+        }
 
+        std::cout << "Pod \"" << parser.value(installOption).toStdString() << "\" not found." << std::endl;
+        return 3;
+    } else
+    if(parser.isSet(removeOption)) {
+        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        foreach(Pod pod, pods) {
+            if(pod.name == parser.value(removeOption)) {
+                bool result = podManager.removePod(repositoryPath, pod.name);
+                if(result) {
+                    std::cout << "Pod \"" << pod.name.toStdString() << "\" removed successfully." << std::endl;
+                    return 0;
+                } else {
+                    std::cout << "Removing pod failed." << std::endl;
+                    return 2;
+                }
+            }
+        }
+        std::cout << "Pod \"" << parser.value(installOption).toStdString() << "\" not found." << std::endl;
+        return 3;
+    } else
+    if(parser.isSet(updateOption)) {
+        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        foreach(Pod pod, pods) {
+            if(pod.name == parser.value(updateOption)) {
+                bool result = podManager.updatePod(repositoryPath, pod.name);
+                if(result) {
+                    std::cout << "Pod \"" << pod.name.toStdString() << "\" updated successfully." << std::endl;
+                    return 0;
+                } else {
+                    std::cout << "Updating pod failed." << std::endl;
+                    return 2;
+                }
+            }
+        }
+        std::cout << "Pod \"" << parser.value(installOption).toStdString() << "\" not found." << std::endl;
+        return 3;
+    } else
+    if(parser.isSet(checkOption)) {
+        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        foreach(Pod pod, pods) {
+            if(pod.name == parser.value(checkOption)) {
+                bool result = podManager.checkPod(repositoryPath, pod.name);
+                if(result) {
+                    std::cout << "Pod \"" << pod.name.toStdString() << "\" is valid." << std::endl;
+                    return 0;
+                } else {
+                    std::cout << "Pod seems not to be valid." << std::endl;
+                    return 2;
+                }
+            }
+        }
+        std::cout << "Pod \"" << parser.value(installOption).toStdString() << "\" not found." << std::endl;
+        return 3;
+    } else
     parser.showHelp();
     return 0;
 }
