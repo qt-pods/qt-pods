@@ -22,6 +22,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "pod.h"
+#include "poddialog.h"
 
 // Qt includes
 #include <QFileDialog>
@@ -213,6 +214,20 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
 
     refreshLocalPods();
     ui->tabWidgetPods->setCurrentIndex(0);
+}
+
+void MainWindow::on_pushButtonInstallExternalPod_clicked() {
+    PodDialog podDialog;
+    if(podDialog.exec() == QDialog::Accepted) {
+        Pod pod = podDialog.pod();
+        if(_podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod)) {
+            QMessageBox::information(this, tr("Pod has been installed"), tr("The pod has been installed successfully."));
+            refreshLocalPods();
+            ui->tabWidgetPods->setCurrentIndex(0);
+        } else {
+            QMessageBox::critical(this, tr("Error install pod"), tr("The pod could not be installed."));
+        }
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {

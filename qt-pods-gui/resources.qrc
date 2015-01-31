@@ -12,5 +12,6 @@
         <file>icons/computer.svg</file>
         <file>icons/network_local.svg</file>
         <file>icons/gnome-system.svg</file>
+        <file>icons/file_new.svg</file>
     </qresource>
 </RCC>

@@ -26,13 +26,16 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    podsmodel.cpp
+    podsmodel.cpp \
+    poddialog.cpp
 
 HEADERS += \
     mainwindow.h \
-    podsmodel.h
+    podsmodel.h \
+    poddialog.h
 
-FORMS += mainwindow.ui
+FORMS += mainwindow.ui \
+    poddialog.ui
 
 RESOURCES += \
     resources.qrc

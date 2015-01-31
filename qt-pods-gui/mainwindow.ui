@@ -312,6 +312,32 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButtonInstallExternalPod">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Install a pod that is not provided in the sources list.</string>
+            </property>
+            <property name="text">
+             <string>Install external pod</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/icons/icons/file_new.svg</normaloff>:/icons/icons/file_new.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
