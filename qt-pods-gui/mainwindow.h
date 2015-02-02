@@ -22,7 +22,12 @@
 
 // Own includes
 #include "podsmodel.h"
+
+// qt-pods includes
 #include "podmanager.h"
+
+// qwaitingspinner includes
+#include "waitingspinnerwidget.h"
 
 // Qt includes
 #include <QMainWindow>
@@ -88,6 +93,9 @@ private:
     QSortFilterProxyModel *_remotePodsProxyModel;
 
     QNetworkAccessManager _networkAccessManager;
+
+    WaitingSpinnerWidget *_availablePodsSpinnerWidget;
+    WaitingSpinnerWidget *_localPodsSpinnerWidget;
 
     Ui::MainWindow *ui;
 };

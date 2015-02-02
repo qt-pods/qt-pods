@@ -62,6 +62,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _systemTrayIcon.setToolTip("Qt Pods");
     _systemTrayIcon.show();
 
+    _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewRemote);
+    _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewLocal);
+
     updateBuildInfo();
     loadSettings();
     refreshAvailablePods();
@@ -215,6 +218,9 @@ void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
 }
 
 void MainWindow::on_pushButtonInstallPods_clicked() {
+    _availablePodsSpinnerWidget->start();
+    _localPodsSpinnerWidget->start();
+
     QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
     QList<Pod> pods;
     foreach(QModelIndex modelIndex, modelIndices) {
@@ -243,11 +249,16 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
         QMessageBox::information(this, tr("Pods have been installed"), tr("Installing %1 pod(s) failed.")
                                  .arg(failureCount));
     }
+
+    _availablePodsSpinnerWidget->stop();
+    _localPodsSpinnerWidget->stop();
 }
 
 void MainWindow::on_pushButtonInstallExternalPod_clicked() {
     PodDialog podDialog;
     if(podDialog.exec() == QDialog::Accepted) {
+        _availablePodsSpinnerWidget->start();
+        _localPodsSpinnerWidget->start();
         Pod pod = podDialog.pod();
         if(_podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod)) {
             QMessageBox::information(this, tr("Pod has been installed"), tr("The pod has been installed successfully."));
@@ -256,6 +267,8 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
         } else {
             QMessageBox::critical(this, tr("Error installing pod"), tr("The pod could not be installed."));
         }
+        _availablePodsSpinnerWidget->stop();
+        _localPodsSpinnerWidget->stop();
     }
 }
 
@@ -290,6 +303,8 @@ void MainWindow::saveSettings() {
 }
 
 void MainWindow::refreshLocalPods() {
+    _localPodsSpinnerWidget->start();
+
     QString repository = ui->comboBoxCurrentRepository->currentText();
     if(!_podManager.isGitRepository(repository)) {
         QMessageBox::warning(this,
@@ -325,9 +340,13 @@ void MainWindow::refreshLocalPods() {
 
         _localPods->appendRow(row);
     }
+
+    _localPodsSpinnerWidget->stop();
 }
 
 void MainWindow::refreshAvailablePods() {
+    _availablePodsSpinnerWidget->start();
+
     QStringList sources;
     sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
 
@@ -346,5 +365,8 @@ void MainWindow::refreshAvailablePods() {
 
         _remotePods->appendRow(row);
     }
+
+
+    _availablePodsSpinnerWidget->stop();
 }
 
