@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>723</width>
-    <height>600</height>
+    <height>617</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
       <item>
        <widget class="QComboBox" name="comboBoxCurrentRepository">
         <property name="sizePolicy">
@@ -35,7 +38,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>32</height>
+          <height>0</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -57,7 +60,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>32</height>
+          <height>0</height>
          </size>
         </property>
         <property name="toolTip">
@@ -72,38 +75,20 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>20</width>
-          <height>20</height>
+          <width>16</width>
+          <height>16</height>
          </size>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="toolButtonRepository">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Add a repository to be tracked.</string>
-        </property>
+       <widget class="QPushButton" name="pushButtonAddRepository">
         <property name="text">
          <string>Add repository</string>
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
           <normaloff>:/icons/icons/list-add.svg</normaloff>:/icons/icons/list-add.svg</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
@@ -125,8 +110,8 @@
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>16</width>
+        <height>16</height>
        </size>
       </property>
       <widget class="QWidget" name="tabLocalPods">
@@ -211,6 +196,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item>
            <widget class="QPushButton" name="pushButtonRemoveLocalPods">
             <property name="toolTip">
@@ -231,8 +219,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>16</width>
+              <height>16</height>
              </size>
             </property>
            </widget>
@@ -260,8 +248,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>16</width>
+              <height>16</height>
              </size>
             </property>
            </widget>
@@ -299,8 +287,8 @@
             </property>
             <property name="iconSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>16</width>
+              <height>16</height>
              </size>
             </property>
            </widget>

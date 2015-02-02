@@ -49,7 +49,7 @@ public:
     void setupStdOutRedirect();
 
 public slots:
-    void on_toolButtonRepository_clicked();
+    void on_pushButtonAddRepository_clicked();
     void on_pushButtonRemoveRepository_clicked();
 
     void on_lineEditSearchLocal_textChanged(QString text);

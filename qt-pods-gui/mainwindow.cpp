@@ -113,7 +113,7 @@ void MainWindow::setupStdOutRedirect() {
 #endif
 }
 
-void MainWindow::on_toolButtonRepository_clicked() {
+void MainWindow::on_pushButtonAddRepository_clicked() {
     QString directory = QFileDialog::getExistingDirectory(this, tr("Add git repository"));
     if(!directory.isEmpty()) {
         if(!_podManager.isGitRepository(directory)) {
