@@ -23,6 +23,7 @@
 #include "ui_mainwindow.h"
 #include "pod.h"
 #include "poddialog.h"
+#include "sourcesdialog.h"
 
 // Qt includes
 #include <QFileDialog>
@@ -41,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
     setObjectName("MainWindow");
     setupStdOutRedirect();
+
+    _settings = new QSettings("qt-pods", "qt-pods");
 
     _workerThread = new QThread();
     _podManager = new PodManager();
@@ -99,8 +102,6 @@ void MainWindow::stdOutActivated(int fileDescriptor) {
         ui->plainTextEditDiagnostic->appendPlainText(readBuffer);
     }
 }
-
-
 
 void MainWindow::updateBuildInfo() {
     QString buildString = QString("%1-%2 (built on %3 at %4)")
@@ -264,6 +265,22 @@ void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
     ui->pushButtonRefreshLocalPods->setEnabled(true);
 }
 
+void MainWindow::on_pushButtonManageSources_clicked() {
+    SourcesDialog sourcesDialog;
+    QStringList sources = _settings->value("sources").toStringList();
+
+    // At least add one source
+    if(sources.isEmpty()) {
+        sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+    }
+    sourcesDialog.setSources(sources);
+
+    if(sourcesDialog.exec() == QDialog::Accepted) {
+        _settings->setValue("sources", sourcesDialog.sources());
+        _settings->sync();
+    }
+}
+
 void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
     ui->tableViewRemote->setEnabled(false);
     ui->pushButtonInstallPods->setEnabled(false);
@@ -323,23 +340,19 @@ void MainWindow::closeEvent(QCloseEvent *closeEvent) {
 }
 
 void MainWindow::loadSettings() {
-    QSettings settings("qt-pods", "qt-pods");
-
-    QStringList repositories = settings.value("local-repositories").toStringList();
+    QStringList repositories = _settings->value("local-repositories").toStringList();
     ui->comboBoxCurrentRepository->addItems(repositories);
-    ui->comboBoxCurrentRepository->setCurrentText(settings.value("active-repository").toString());
+    ui->comboBoxCurrentRepository->setCurrentText(_settings->value("active-repository").toString());
 }
 
 void MainWindow::saveSettings() {
-    QSettings settings("qt-pods", "qt-pods");
-
     QStringList repositories;
     for(int i = 0; i < ui->comboBoxCurrentRepository->count(); i++) {
         repositories.append(ui->comboBoxCurrentRepository->itemText(i));
     }
-    settings.setValue("local-repositories", repositories);
-    settings.setValue("active-repository", ui->comboBoxCurrentRepository->currentText());
-    settings.sync();
+    _settings->setValue("local-repositories", repositories);
+    _settings->setValue("active-repository", ui->comboBoxCurrentRepository->currentText());
+    _settings->sync();
 }
 
 void MainWindow::installPodsFinished(QString repository, QList<Pod> pods, bool success) {
@@ -439,7 +452,6 @@ void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> available
         _remotePods->appendRow(row);
     }
 
-
     _availablePodsSpinnerWidget->stop();
 }
 
@@ -465,8 +477,10 @@ void MainWindow::refreshLocalPods() {
 void MainWindow::refreshAvailablePods() {
     _availablePodsSpinnerWidget->start();
 
-    QStringList sources;
-    sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+    QStringList sources = _settings->value("sources").toStringList();
+    if(sources.isEmpty()) {
+        sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+    }
 
     metaObject()->invokeMethod(_podManager, "availablePods", Q_ARG(QStringList, sources));
 }

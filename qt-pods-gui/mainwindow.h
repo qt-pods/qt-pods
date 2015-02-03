@@ -35,6 +35,7 @@
 #include <QSystemTrayIcon>
 #include <QSocketNotifier>
 #include <QThread>
+#include <QSettings>
 
 namespace Ui {
 class MainWindow;
@@ -63,6 +64,7 @@ public slots:
     void on_pushButtonRefreshLocalPods_clicked();
     void on_pushButtonRemoveLocalPods_clicked();
 
+    void on_pushButtonManageSources_clicked();
     void on_pushButtonRefreshAvailablePods_clicked();
     void on_pushButtonInstallPods_clicked();
     void on_pushButtonInstallExternalPod_clicked();
@@ -93,6 +95,7 @@ private:
     QSocketNotifier *_stdOutSocketNotifier;
     QSystemTrayIcon _systemTrayIcon;
     QThread *_workerThread;
+    QSettings *_settings;
 
     PodManager *_podManager;
     PodsModel *_localPods;

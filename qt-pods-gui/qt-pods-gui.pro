@@ -27,15 +27,18 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     podsmodel.cpp \
-    poddialog.cpp
+    poddialog.cpp \
+    sourcesdialog.cpp
 
 HEADERS += \
     mainwindow.h \
     podsmodel.h \
-    poddialog.h
+    poddialog.h \
+    sourcesdialog.h
 
 FORMS += mainwindow.ui \
-    poddialog.ui
+    poddialog.ui \
+    sourcesdialog.ui
 
 RESOURCES += \
     resources.qrc
