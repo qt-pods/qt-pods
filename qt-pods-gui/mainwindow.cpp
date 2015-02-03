@@ -42,6 +42,22 @@ MainWindow::MainWindow(QWidget *parent) :
     setObjectName("MainWindow");
     setupStdOutRedirect();
 
+    _workerThread = new QThread();
+    _podManager = new PodManager();
+    _podManager->moveToThread(_workerThread);
+    _workerThread->start();
+
+    connect(_podManager, SIGNAL(installPodsFinished(QString, QList<Pod>, bool)),
+            this, SLOT(installPodsFinished(QString,QList<Pod>,bool)));
+    connect(_podManager, SIGNAL(removePodsFinished(QString, QStringList, bool)),
+            this, SLOT(removePodsFinished(QString, QStringList,bool)));
+    connect(_podManager, SIGNAL(updatePodsFinished(QString, QStringList, bool)),
+            this, SLOT(updatePodsFinished(QString, QStringList, bool)));
+    connect(_podManager, SIGNAL(installedPodsFinished(QString, QList<Pod>)),
+            this, SLOT(installedPodsFinished(QString,QList<Pod>)));
+    connect(_podManager, SIGNAL(availablePodsFinished(QStringList, QList<Pod>)),
+            this, SLOT(availablePodsFinished(QStringList,QList<Pod>)));
+
     ui->setupUi(this);
 
     _localPods = new PodsModel();
@@ -67,7 +83,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     updateBuildInfo();
     loadSettings();
-    refreshAvailablePods();
 }
 
 MainWindow::~MainWindow() {
@@ -84,6 +99,8 @@ void MainWindow::stdOutActivated(int fileDescriptor) {
         ui->plainTextEditDiagnostic->appendPlainText(readBuffer);
     }
 }
+
+
 
 void MainWindow::updateBuildInfo() {
     QString buildString = QString("%1-%2 (built on %3 at %4)")
@@ -116,7 +133,7 @@ void MainWindow::setupStdOutRedirect() {
 void MainWindow::on_pushButtonAddRepository_clicked() {
     QString directory = QFileDialog::getExistingDirectory(this, tr("Add git repository"));
     if(!directory.isEmpty()) {
-        if(!_podManager.isGitRepository(directory)) {
+        if(!_podManager->isGitRepository(directory)) {
             QMessageBox::warning(this,
                 tr("Invalid repository"),
                 tr("The directory you supplied does not appear to be the root of a valid git repository."));
@@ -151,6 +168,18 @@ void MainWindow::on_comboBoxCurrentRepository_currentTextChanged(QString text) {
     refreshLocalPods();
 }
 
+void MainWindow::on_tabWidgetPods_currentChanged(int index) {
+    switch (index) {
+    case 0:
+        refreshLocalPods();
+        break;
+    case 1:
+        refreshAvailablePods();
+    default:
+        break;
+    }
+}
+
 void MainWindow::on_lineEditSearchLocal_textChanged(QString text) {
     _localPodsProxyModel->setFilterWildcard(text);
 }
@@ -161,7 +190,6 @@ void MainWindow::on_lineEditSearchRemote_textChanged(QString text) {
 
 void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
     QModelIndexList modelIndices = ui->tableViewLocal->selectionModel()->selectedRows(0);
-
     if(modelIndices.count() == 0) {
         return;
     }
@@ -180,17 +208,48 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
     }
 
     if(confirmationResult == QMessageBox::Yes) {
+        _localPodsSpinnerWidget->start();
+        QStringList podNames;
         foreach(QModelIndex modelIndex, modelIndices) {
-            _podManager.removePod(ui->comboBoxCurrentRepository->currentText(),
-                                  _localPods->item(modelIndex.row(), 0)->text());
+            podNames.append(_localPods->item(modelIndex.row(), 0)->text());
         }
-        refreshLocalPods();
+
+        metaObject()->invokeMethod(_podManager, "removePods",
+                                   Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
+                                   Q_ARG(QStringList, podNames));
     }
 }
 
 void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
-    _podManager.updatePods(ui->comboBoxCurrentRepository->currentText());
-    refreshLocalPods();
+    QModelIndexList modelIndices = ui->tableViewLocal->selectionModel()->selectedRows(0);
+    if(modelIndices.count() == 0) {
+        return;
+    }
+
+    int confirmationResult;
+    if(modelIndices.count() == 1) {
+        confirmationResult = QMessageBox::warning(this,
+            tr("Confirm update"),
+            tr("Are you sure you want to update \"%1\"?")
+                .arg(modelIndices.at(0).data().toString()),QMessageBox::No, QMessageBox::Yes);
+    } else {
+        confirmationResult = QMessageBox::warning(this,
+            tr("Confirm update"),
+            tr("Are you sure you want to update \"%1\" pods?")
+                .arg(modelIndices.count()), QMessageBox::No, QMessageBox::Yes);
+    }
+
+    if(confirmationResult == QMessageBox::Yes) {
+        _localPodsSpinnerWidget->start();
+        QStringList podNames;
+        foreach(QModelIndex modelIndex, modelIndices) {
+            podNames.append(_localPods->item(modelIndex.row(), 0)->text());
+        }
+
+        metaObject()->invokeMethod(_podManager, "updatePods",
+                                   Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
+                                   Q_ARG(QStringList, podNames));
+    }
 }
 
 void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
@@ -230,28 +289,10 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
         pods.append(pod);
     }
 
-    int failureCount = 0;
-    foreach(Pod pod, pods) {
-        if(!_podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod)) {
-            QMessageBox::critical(this, tr("Error installing pod"), tr("The pod \"%1\" could not be installed.")
-                                  .arg(pod.name));
-            failureCount++;
-        }
-    }
-
-    refreshLocalPods();
-    ui->tabWidgetPods->setCurrentIndex(0);
-
-    if(failureCount == 0) {
-        QMessageBox::information(this, tr("Pods have been installed"), tr("Finished installing %1 pods.")
-                                 .arg(pods.count()));
-    } else {
-        QMessageBox::information(this, tr("Pods have been installed"), tr("Installing %1 pod(s) failed.")
-                                 .arg(failureCount));
-    }
-
-    _availablePodsSpinnerWidget->stop();
-    _localPodsSpinnerWidget->stop();
+    metaObject()->invokeMethod(_podManager,
+                               "installPods",
+                               Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
+                               Q_ARG(QList<Pod>, pods));
 }
 
 void MainWindow::on_pushButtonInstallExternalPod_clicked() {
@@ -259,16 +300,15 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
     if(podDialog.exec() == QDialog::Accepted) {
         _availablePodsSpinnerWidget->start();
         _localPodsSpinnerWidget->start();
-        Pod pod = podDialog.pod();
-        if(_podManager.installPod(ui->comboBoxCurrentRepository->currentText(), pod)) {
-            QMessageBox::information(this, tr("Pod has been installed"), tr("The pod has been installed successfully."));
-            refreshLocalPods();
-            ui->tabWidgetPods->setCurrentIndex(0);
-        } else {
-            QMessageBox::critical(this, tr("Error installing pod"), tr("The pod could not be installed."));
-        }
-        _availablePodsSpinnerWidget->stop();
-        _localPodsSpinnerWidget->stop();
+
+        QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
+        QList<Pod> pods;
+        pods.append(podDialog.pod());
+
+        metaObject()->invokeMethod(_podManager,
+                                   "installPods",
+                                   Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
+                                   Q_ARG(QList<Pod>, pods));
     }
 }
 
@@ -302,32 +342,70 @@ void MainWindow::saveSettings() {
     settings.sync();
 }
 
-void MainWindow::refreshLocalPods() {
-    _localPodsSpinnerWidget->start();
+void MainWindow::installPodsFinished(QString repository, QList<Pod> pods, bool success) {
+    _availablePodsSpinnerWidget->stop();
+    _localPodsSpinnerWidget->stop();
 
-    QString repository = ui->comboBoxCurrentRepository->currentText();
-    if(!_podManager.isGitRepository(repository)) {
-        QMessageBox::warning(this,
-            tr("Invalid repository"),
-            tr("The directory you supplied does not appear to be the root of a valid git repository."));
+    ui->tabWidgetPods->setCurrentIndex(0);
 
-        int index;
-        while((index = ui->comboBoxCurrentRepository->findText(repository)) != -1) {
-            ui->comboBoxCurrentRepository->removeItem(index);
-        }
-        return;
+    if(success) {
+        QMessageBox::information(this,
+                                 tr("Installing pods in %1").arg(repository),
+                                 tr("Finished installing %1 pods.").arg(pods.count()));
+    } else {
+        QMessageBox::information(this,
+                                 tr("Installing pods in %1").arg(repository),
+                                 tr("Installing some of the selected pods failed."));
     }
 
-    QList<Pod> pods = _podManager.installedPods(repository);
+    refreshLocalPods();
+}
 
+void MainWindow::removePodsFinished(QString repository, QStringList podNames, bool success) {
+    _localPodsSpinnerWidget->stop();
+
+    ui->tabWidgetPods->setCurrentIndex(0);
+
+    if(success) {
+        QMessageBox::information(this,
+                                 tr("Removing pods in %1").arg(repository),
+                                 tr("Finished removing %1 pods.").arg(podNames.count()));
+    } else {
+        QMessageBox::information(this,
+                                 tr("Removing pods in %1").arg(repository),
+                                 tr("Removing some of the selected pods failed."));
+    }
+
+    refreshLocalPods();
+}
+
+void MainWindow::updatePodsFinished(QString repository, QStringList podNames, bool success) {
+    _localPodsSpinnerWidget->stop();
+
+    ui->tabWidgetPods->setCurrentIndex(0);
+
+    if(success) {
+        QMessageBox::information(this,
+                                 tr("Updating pods in %1").arg(repository),
+                                 tr("Finished updating %1 pods.").arg(podNames.count()));
+    } else {
+        QMessageBox::information(this,
+                                 tr("Updating pods in %1").arg(repository),
+                                 tr("Updating some of the selected pods failed."));
+    }
+
+    refreshLocalPods();
+}
+
+void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedPods) {
     // Clear model
     _localPods->reset();
-    foreach(Pod pod, pods) {
+    foreach(Pod pod, installedPods) {
         QList<QStandardItem*> row;
         row.append(new QStandardItem(pod.name));
         row.append(new QStandardItem(pod.url));
 
-        if(!_podManager.checkPod(repository, pod.name)) {
+        if(!_podManager->checkPod(repository, pod.name)) {
             QFont font = row.at(0)->font();
             font.setItalic(true);
             row.at(0)->setFont(font);
@@ -344,17 +422,12 @@ void MainWindow::refreshLocalPods() {
     _localPodsSpinnerWidget->stop();
 }
 
-void MainWindow::refreshAvailablePods() {
-    _availablePodsSpinnerWidget->start();
-
-    QStringList sources;
-    sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
-
-    QList<Pod> pods = _podManager.availablePods(sources);
+void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> availablePods) {
+    Q_UNUSED(sources);
 
     // Clear model
     _remotePods->reset();
-    foreach(Pod pod, pods) {
+    foreach(Pod pod, availablePods) {
         QList<QStandardItem*> row;
         row.append(new QStandardItem(pod.name));
         row.append(new QStandardItem(pod.url));
@@ -368,5 +441,33 @@ void MainWindow::refreshAvailablePods() {
 
 
     _availablePodsSpinnerWidget->stop();
+}
+
+void MainWindow::refreshLocalPods() {
+    _localPodsSpinnerWidget->start();
+
+    QString repository = ui->comboBoxCurrentRepository->currentText();
+    if(!_podManager->isGitRepository(repository)) {
+        QMessageBox::warning(this,
+            tr("Invalid repository"),
+            tr("The directory you supplied does not appear to be the root of a valid git repository."));
+
+        int index;
+        while((index = ui->comboBoxCurrentRepository->findText(repository)) != -1) {
+            ui->comboBoxCurrentRepository->removeItem(index);
+        }
+        return;
+    }
+
+    metaObject()->invokeMethod(_podManager, "installedPods", Q_ARG(QString, repository));
+}
+
+void MainWindow::refreshAvailablePods() {
+    _availablePodsSpinnerWidget->start();
+
+    QStringList sources;
+    sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+
+    metaObject()->invokeMethod(_podManager, "availablePods", Q_ARG(QStringList, sources));
 }
 

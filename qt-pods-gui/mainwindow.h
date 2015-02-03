@@ -34,6 +34,7 @@
 #include <QSortFilterProxyModel>
 #include <QSystemTrayIcon>
 #include <QSocketNotifier>
+#include <QThread>
 
 namespace Ui {
 class MainWindow;
@@ -56,6 +57,7 @@ public slots:
     void on_lineEditSearchRemote_textChanged(QString text);
 
     void on_comboBoxCurrentRepository_currentTextChanged(QString text);
+    void on_tabWidgetPods_currentChanged(int index);
 
     void on_pushButtonUpdateLocalPods_clicked();
     void on_pushButtonRefreshLocalPods_clicked();
@@ -73,6 +75,12 @@ protected:
 private slots:
     void stdOutActivated(int fileDescriptor);
 
+    void installPodsFinished(QString repository, QList<Pod> pods, bool success);
+    void removePodsFinished(QString repository, QStringList podNames, bool success);
+    void updatePodsFinished(QString repository, QStringList podNames, bool success);
+    void installedPodsFinished(QString repository, QList<Pod> installedPods);
+    void availablePodsFinished(QStringList sources, QList<Pod> availablePods);
+
 private:
     void updateBuildInfo();
     void loadSettings();
@@ -84,8 +92,9 @@ private:
 
     QSocketNotifier *_stdOutSocketNotifier;
     QSystemTrayIcon _systemTrayIcon;
+    QThread *_workerThread;
 
-    PodManager _podManager;
+    PodManager *_podManager;
     PodsModel *_localPods;
     PodsModel *_remotePods;
 
