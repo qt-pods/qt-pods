@@ -35,7 +35,8 @@ Naming:
 * The *.pro must have exactly have the same name as the repository.
 * The repository contains a *.pri file that contains instructions for the final target (for example linker flags of dependencies).
 * The resulting library must be in the root of the repository after it has been built.
-
+* Pod names should start with "qt", ie. "qtfoo".
+* 
 Formalities:
 * The repository must contain a LICENSE file with the license at root.
 * The repository must contain a README.md file at root.
