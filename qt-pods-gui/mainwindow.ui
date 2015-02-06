@@ -28,6 +28,13 @@
        <number>6</number>
       </property>
       <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Repository:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QComboBox" name="comboBoxCurrentRepository">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -67,7 +74,7 @@
          <string>Untrack selected repository. The repository will not be removed on disk.</string>
         </property>
         <property name="text">
-         <string>Untrack repository</string>
+         <string>Untrack</string>
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
@@ -84,11 +91,25 @@
       <item>
        <widget class="QPushButton" name="pushButtonAddRepository">
         <property name="text">
-         <string>Add repository</string>
+         <string>Track</string>
         </property>
         <property name="icon">
          <iconset resource="resources.qrc">
           <normaloff>:/icons/icons/list-add.svg</normaloff>:/icons/icons/list-add.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonCreateNewRepository">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Create new</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/icons/file_new.svg</normaloff>:/icons/icons/file_new.svg</iconset>
         </property>
        </widget>
       </item>

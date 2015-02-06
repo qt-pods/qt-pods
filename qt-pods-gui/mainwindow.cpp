@@ -271,7 +271,7 @@ void MainWindow::on_pushButtonManageSources_clicked() {
 
     // At least add one source
     if(sources.isEmpty()) {
-        sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+        sources << "http://sources.qt-pods.org";
     }
     sourcesDialog.setSources(sources);
 
@@ -479,7 +479,7 @@ void MainWindow::refreshAvailablePods() {
 
     QStringList sources = _settings->value("sources").toStringList();
     if(sources.isEmpty()) {
-        sources << "https://raw.githubusercontent.com/cybercatalyst/qt-pods-master/master/pods.json";
+        sources << "http://sources.qt-pods.org";
     }
 
     metaObject()->invokeMethod(_podManager, "availablePods", Q_ARG(QStringList, sources));
