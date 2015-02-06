@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     parser.process(app);
 
     QStringList sources;
-    sources << "http://sources.qt-pods.org";
+    sources << "http://qt-pods.org/pods.json";
 
     PodManager podManager;
     QString repositoryPath = QDir::current().absolutePath();
