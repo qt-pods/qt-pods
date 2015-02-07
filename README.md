@@ -15,15 +15,15 @@ others with Qt, it turned out to be a good idea to share them as static libs
 and git submodules. These are the rules that must apply to every pod:
 
 Naming:
-1. The fragment name is all lower-case and is equal to the repository name.
-2. The distribution of the source within the pod is up to the developer.
-3. The repository root contains a *.pro file that is a static lib template.
-4. The *.pro must have exactly have the same name as the repository.
-5. The repository contains a *.pri file that contains instructions for the final target (for example linker flags of dependencies).
-6. The resulting library must be in the root of the repository after it has been built.
-7. Pod names should start with "qt", ie. "qtfoo".
-8. The repository must contain a LICENSE file with the license at root.
-9. The repository must contain a README.md file at root.
+- The fragment name is all lower-case and is equal to the repository name.
+- The distribution of the source within the pod is up to the developer.
+- The repository root contains a *.pro file that is a static lib template.
+- The *.pro must have exactly have the same name as the repository.
+- The repository contains a *.pri file that contains instructions for the final target (for example linker flags of dependencies).
+- The resulting library must be in the root of the repository after it has been built.
+- Pod names should start with "qt", ie. "qtfoo".
+- The repository must contain a LICENSE file with the license at root.
+- The repository must contain a README.md file at root.
 
 ## For developers
 
