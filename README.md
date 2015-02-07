@@ -9,39 +9,21 @@ Inspired by the cocoapods project, each "pod" follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
 
-## How to use
-
-[![Tutorial](http://img.youtube.com/vi/P-gA5g9ZP9I/0.jpg)](http://www.youtube.com/watch?v=P-gA5g9ZP9I)
-
-## pod sources
-In order to know which pods are available, you need to specify pod sources.
-Pod sources are simply a json-file that list available pods. Currently, only a
-single source is hard-coded, but the goal is to let the developer specify his
-own sources. Since that source (the "master", or default source) is hosted on
-github, developer can easily add their pods by making a pull request:
-https://github.com/cybercatalyst/qt-pods-master
-
-Before opening a pull request, you should check whether your submission follows
-the pod rules.
-
 ## pod rules
 Based on my previous experiences with exporting code fragments to be used by
 others with Qt, it turned out to be a good idea to share them as static libs
 and git submodules. These are the rules that must apply to every pod:
 
 Naming:
-* The fragment name is all lower-case and is equal to the repository name.
-* The fragment name is unique.
-* The distribution of the source within the pod is up to the developer.
-* The repository root contains a *.pro file that is a static lib template.
-* The *.pro must have exactly have the same name as the repository.
-* The repository contains a *.pri file that contains instructions for the final target (for example linker flags of dependencies).
-* The resulting library must be in the root of the repository after it has been built.
-* Pod names should start with "qt", ie. "qtfoo".
-* 
-Formalities:
-* The repository must contain a LICENSE file with the license at root.
-* The repository must contain a README.md file at root.
+1. The fragment name is all lower-case and is equal to the repository name.
+2. The distribution of the source within the pod is up to the developer.
+3. The repository root contains a *.pro file that is a static lib template.
+4. The *.pro must have exactly have the same name as the repository.
+5. The repository contains a *.pri file that contains instructions for the final target (for example linker flags of dependencies).
+6. The resulting library must be in the root of the repository after it has been built.
+7. Pod names should start with "qt", ie. "qtfoo".
+8. The repository must contain a LICENSE file with the license at root.
+9. The repository must contain a README.md file at root.
 
 ## For developers
 
