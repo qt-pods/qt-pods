@@ -10,11 +10,7 @@ its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
 
 ## pod rules
-Based on my previous experiences with exporting code fragments to be used by
-others with Qt, it turned out to be a good idea to share them as static libs
-and git submodules. These are the rules that must apply to every pod:
 
-Naming:
 - The fragment name is all lower-case and is equal to the repository name.
 - The distribution of the source within the pod is up to the developer.
 - The repository root contains a *.pro file that is a static lib template.
