@@ -1,3 +1,5 @@
+[![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)
+
 # qt-pods
 
 ![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
