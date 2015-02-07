@@ -1,6 +1,6 @@
 [![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)
 
-# qt-pods
+## qt-pods ([http://www.qt-pods.org](official website))
 
 ![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
 
@@ -9,11 +9,11 @@ Inspired by the cocoapods project, each "pod" follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
 
-# How to use
+## How to use
 
 [![Tutorial](http://img.youtube.com/vi/P-gA5g9ZP9I/0.jpg)](http://www.youtube.com/watch?v=P-gA5g9ZP9I)
 
-# pod sources
+## pod sources
 In order to know which pods are available, you need to specify pod sources.
 Pod sources are simply a json-file that list available pods. Currently, only a
 single source is hard-coded, but the goal is to let the developer specify his
@@ -24,7 +24,7 @@ https://github.com/cybercatalyst/qt-pods-master
 Before opening a pull request, you should check whether your submission follows
 the pod rules.
 
-# pod rules
+## pod rules
 Based on my previous experiences with exporting code fragments to be used by
 others with Qt, it turned out to be a good idea to share them as static libs
 and git submodules. These are the rules that must apply to every pod:
@@ -43,7 +43,7 @@ Formalities:
 * The repository must contain a LICENSE file with the license at root.
 * The repository must contain a README.md file at root.
 
-# For developers
+## For developers
 
 ![Architecture](https://github.com/cybercatalyst/qt-pods/blob/master/architecture.png "Architecture")
 
@@ -68,7 +68,7 @@ include(pods-subdirs.pri)
 
 If you have an existing project, you need to put in that line manually.
 
-# Compile and install
+## Compile and install
 Development takes places with the latest version of Qt. Before submitting a bug report, please check whether that occurs
 with the latest version of Qt. If it doesn't, it is not a bug.
 
@@ -82,7 +82,7 @@ Run from the command line:
 $ qt-pods
 ```
 
-# How does qt-pods compare to inqlude?
+## How does qt-pods compare to inqlude?
 At first sight these projects are very similar, but they aren't at all. inqlude's mission is to get an overview of libraries.
 Inqlude contains a set of meta-information how a certain library is being installed on a certain system - systemwide.
 Inqlude tries to gracefully wrap around everything to get it working somehow - even if it finally needs to compile libraries from source.
@@ -92,10 +92,10 @@ will keep working even when someone who doesn't use qt-pods wants to build your 
 the time you are cloning a repository, and they will be gone when you don't work on a project anymore. qt-pods expects that pods
 are in a certain format, rather than abstracting away differences through a manifest.
 
-# Disclaimer
+## Disclaimer
 Please be careful. This software is in early state, use it with caution. Make backups of your repositories.
 
-# Ideas, improvements?
+## Ideas, improvements?
 
-Let me know at jacob@omg-it.works.
+Let me know at jacob@qt-pods.org.
 
