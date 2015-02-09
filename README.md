@@ -18,7 +18,7 @@ Then run:
 ```
 qmake && make
 ```
-For system-wide installation run as root:
+For system-wide installation run as root in the folder the executable is located in:
 ```
 make install
 ```
@@ -59,20 +59,6 @@ include(pods-subdirs.pri)
 ```
 
 If you have an existing project, you need to put in that line manually.
-
-## Compile and install
-Development takes places with the latest version of Qt. Before submitting a bug report, please check whether that occurs
-with the latest version of Qt. If it doesn't, it is not a bug.
-
-Other than that, for a system wide install do this in the build directory:
-```
-$ sudo make install
-```
-
-Run from the command line:
-```
-$ qt-pods
-```
 
 ## How does qt-pods compare to inqlude?
 At first sight these projects are very similar, but they aren't at all. inqlude's mission is to get an overview of libraries.
