@@ -37,6 +37,7 @@
 #include <unistd.h>
 #endif
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -204,7 +205,7 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
     } else {
         confirmationResult = QMessageBox::warning(this,
             tr("Confirm removal"),
-            tr("Are you sure you want to remove \"%1\" pods from the repository?")
+            tr("Are you sure you want to remove %1 pods from the repository?")
                 .arg(modelIndices.count()), QMessageBox::No, QMessageBox::Yes);
     }
 
@@ -212,7 +213,7 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
         _localPodsSpinnerWidget->start();
         QStringList podNames;
         foreach(QModelIndex modelIndex, modelIndices) {
-            podNames.append(_localPods->item(modelIndex.row(), 0)->text());
+            podNames.append(_localPods->pod(modelIndex).name);
         }
 
         metaObject()->invokeMethod(_podManager, "removePods",
@@ -244,7 +245,7 @@ void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
         _localPodsSpinnerWidget->start();
         QStringList podNames;
         foreach(QModelIndex modelIndex, modelIndices) {
-            podNames.append(_localPods->item(modelIndex.row(), 0)->text());
+            podNames.append(_localPods->pod(modelIndex).name);
         }
 
         metaObject()->invokeMethod(_podManager, "updatePods",
@@ -297,15 +298,7 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
     _availablePodsSpinnerWidget->start();
     _localPodsSpinnerWidget->start();
 
-    QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
-    QList<Pod> pods;
-    foreach(QModelIndex modelIndex, modelIndices) {
-        Pod pod;
-        pod.name = _remotePods->item(modelIndex.row(), 0)->text();
-        pod.url = _remotePods->item(modelIndex.row(), 1)->text();
-        pods.append(pod);
-    }
-
+    QList<Pod> pods = _remotePods->pods(ui->tableViewRemote->selectionModel()->selectedRows(0));
     metaObject()->invokeMethod(_podManager,
                                "installPods",
                                Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
@@ -411,48 +404,17 @@ void MainWindow::updatePodsFinished(QString repository, QStringList podNames, bo
 }
 
 void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedPods) {
-    // Clear model
-    _localPods->reset();
-    foreach(Pod pod, installedPods) {
-        QList<QStandardItem*> row;
-        row.append(new QStandardItem(pod.name));
-        row.append(new QStandardItem(pod.url));
-
-        if(!_podManager->checkPod(repository, pod.name)) {
-            QFont font = row.at(0)->font();
-            font.setItalic(true);
-            row.at(0)->setFont(font);
-            row.at(1)->setFont(font);
-        }
-
-        foreach(QStandardItem *item, row) {
-            item->setEditable(false);
-        }
-
-        _localPods->appendRow(row);
-    }
-
+    Q_UNUSED(repository);
+    _localPods->setModelData(installedPods);
     _localPodsSpinnerWidget->stop();
+    ui->tableViewLocal->resizeColumnsToContents();
 }
 
 void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> availablePods) {
     Q_UNUSED(sources);
-
-    // Clear model
-    _remotePods->reset();
-    foreach(Pod pod, availablePods) {
-        QList<QStandardItem*> row;
-        row.append(new QStandardItem(pod.name));
-        row.append(new QStandardItem(pod.url));
-
-        foreach(QStandardItem *item, row) {
-            item->setEditable(false);
-        }
-
-        _remotePods->appendRow(row);
-    }
-
+    _remotePods->setModelData(availablePods);
     _availablePodsSpinnerWidget->stop();
+    ui->tableViewRemote->resizeColumnsToContents();
 }
 
 void MainWindow::refreshLocalPods() {

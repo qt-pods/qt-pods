@@ -20,12 +20,39 @@
 
 #pragma once
 
-// Qt includes
-#include <QStandardItemModel>
+#include "pod.h"
 
-class PodsModel : public QStandardItemModel {
+// Qt includes
+#include <QAbstractItemModel>
+#include <QList>
+
+class PodsModel : public QAbstractItemModel {
 public:
+    enum PodField {
+       PodFieldName         = 0,
+       PodFieldAuthor       = 1,
+       PodFieldLicense      = 2,
+       PodFieldDescription  = 3
+    };
+
     PodsModel();
 
-    void reset();
+    void setModelData(QList<Pod> modelData);
+    QList<Pod> modelData();
+
+    Pod pod(QModelIndex modelIndex);
+    QList<Pod> pods(QModelIndexList modelIndexList);
+
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QModelIndex parent(const QModelIndex &child) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+
+private:
+    QList<Pod> _modelData;
 };
