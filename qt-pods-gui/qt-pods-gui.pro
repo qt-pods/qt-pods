@@ -42,6 +42,8 @@ FORMS += mainwindow.ui \
 
 RESOURCES += \
     resources.qrc
+
+ICON = icons/qtpods.icns
     
 include(../pods.pri)
 

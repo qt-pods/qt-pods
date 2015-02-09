@@ -13,5 +13,6 @@
         <file>icons/network_local.svg</file>
         <file>icons/gnome-system.svg</file>
         <file>icons/file_new.svg</file>
+        <file>icons/appicon.svg</file>
     </qresource>
 </RCC>
