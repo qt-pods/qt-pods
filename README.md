@@ -1,6 +1,6 @@
 [![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)
 
-## qt-pods ([http://www.qt-pods.org](official website))
+## qt-pods ([http://www.qt-pods.org](http://www.qt-pods.org))
 
 ![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
 
