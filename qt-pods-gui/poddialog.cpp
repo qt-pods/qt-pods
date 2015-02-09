@@ -22,22 +22,57 @@
 #include "poddialog.h"
 #include "ui_poddialog.h"
 
+// Qt includes
+#include <QDesktopServices>
+#include <QUrl>
+
 PodDialog::PodDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PodDialog) {
     ui->setupUi(this);
 }
 
+void PodDialog::setEditable(bool editable) {
+    if(!editable) {
+        ui->lineEditAuthor->setPlaceholderText("<Not provided>");
+        ui->lineEditDescription->setPlaceholderText("<Not provided>");
+        ui->lineEditWebsite->setPlaceholderText("<Not provided>");
+        ui->lineEditPodUrl->setPlaceholderText("<Not provided>");
+        ui->lineEditPodName->setPlaceholderText("<Not provided>");
+    }
+
+    ui->lineEditAuthor->setReadOnly(!editable);
+    ui->lineEditDescription->setReadOnly(!editable);
+    ui->lineEditWebsite->setReadOnly(!editable);
+    ui->lineEditPodUrl->setReadOnly(!editable);
+    ui->lineEditPodName->setReadOnly(!editable);
+    ui->comboBoxLicense->setEnabled(editable);
+}
+
 void PodDialog::setPod(Pod pod) {
-    ui->lineEditPodName->setText(pod.name);
-    ui->lineEditPodUrl->setText(pod.url);
+    ui->lineEditPodName->setText        (pod.name);
+    ui->lineEditPodUrl->setText         (pod.url);
+    ui->lineEditAuthor->setText         (pod.author);
+    ui->lineEditWebsite->setText        (pod.website);
+    ui->lineEditDescription->setText    (pod.description);
+    ui->comboBoxLicense->setCurrentText (pod.license);
+
+    ui->pushButtonVisit->setEnabled(!ui->lineEditWebsite->text().isEmpty());
 }
 
 Pod PodDialog::pod() {
     Pod pod;
-    pod.name = ui->lineEditPodName->text();
-    pod.url = ui->lineEditPodUrl->text();
+    pod.name        = ui->lineEditPodName->text();
+    pod.url         = ui->lineEditPodUrl->text();
+    pod.author      = ui->lineEditAuthor->text();
+    pod.website     = ui->lineEditWebsite->text();
+    pod.description = ui->lineEditDescription->text();
+    pod.license     = ui->comboBoxLicense->currentText();
     return pod;
+}
+
+void PodDialog::on_pushButtonVisit_clicked() {
+    QDesktopServices::openUrl(QUrl(ui->lineEditWebsite->text()));
 }
 
 PodDialog::~PodDialog()

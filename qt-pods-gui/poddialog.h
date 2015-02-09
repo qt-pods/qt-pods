@@ -37,8 +37,13 @@ public:
     explicit PodDialog(QWidget *parent = 0);
     ~PodDialog();
 
+    void setEditable(bool editable = true);
+
     void setPod(Pod pod);
     Pod pod();
+
+protected slots:
+    void on_pushButtonVisit_clicked();
 
 private:
     Ui::PodDialog *ui;

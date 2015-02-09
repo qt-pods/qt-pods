@@ -327,6 +327,20 @@ void MainWindow::on_pushButtonReportIssue_clicked() {
     desktopServices.openUrl(QUrl("https://github.com/cybercatalyst/qt-pods/issues"));
 }
 
+void MainWindow::on_tableViewLocal_doubleClicked(QModelIndex index) {
+    PodDialog podDialog;
+    podDialog.setPod(_localPods->pod(index));
+    podDialog.setEditable(false);
+    podDialog.exec();
+}
+
+void MainWindow::on_tableViewRemote_doubleClicked(QModelIndex index) {
+    PodDialog podDialog;
+    podDialog.setPod(_remotePods->pod(index));
+    podDialog.setEditable(false);
+    podDialog.exec();
+}
+
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
     saveSettings();
     QMainWindow::closeEvent(closeEvent);

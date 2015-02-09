@@ -71,6 +71,9 @@ public slots:
 
     void on_pushButtonReportIssue_clicked();
 
+    void on_tableViewLocal_doubleClicked(QModelIndex index);
+    void on_tableViewRemote_doubleClicked(QModelIndex index);
+
 protected:
     void closeEvent(QCloseEvent *closeEvent);
 
