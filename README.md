@@ -9,6 +9,20 @@ Inspired by the cocoapods project, each "pod" follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
 
+## How to build
+Clone repository recursively:
+```
+git clone --recursive https://github.com/cybercatalyst/qt-pods.git
+```
+Then run:
+```
+qmake && make
+```
+For system-wide installation run as root:
+```
+make install
+```
+
 ## pod rules
 
 - The fragment name is all lower-case and is equal to the repository name.
