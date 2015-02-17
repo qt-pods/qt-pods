@@ -191,7 +191,15 @@ void MainWindow::on_lineEditSearchRemote_textChanged(QString text) {
 }
 
 void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
-    QModelIndexList modelIndices = ui->tableViewLocal->selectionModel()->selectedRows(0);
+    QItemSelection itemSelection = ui->tableViewLocal->selectionModel()->selection();
+    QModelIndexList selectedModelIndices = _localPodsProxyModel->mapSelectionToSource(itemSelection).indexes();
+    QModelIndexList modelIndices;
+    foreach(QModelIndex i, selectedModelIndices) {
+        if(i.column() == 0) {
+            modelIndices.append(i);
+        }
+    }
+
     if(modelIndices.count() == 0) {
         return;
     }
@@ -223,7 +231,15 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
 }
 
 void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
-    QModelIndexList modelIndices = ui->tableViewLocal->selectionModel()->selectedRows(0);
+    QItemSelection itemSelection = ui->tableViewLocal->selectionModel()->selection();
+    QModelIndexList selectedModelIndices = _localPodsProxyModel->mapSelectionToSource(itemSelection).indexes();
+    QModelIndexList modelIndices;
+    foreach(QModelIndex i, selectedModelIndices) {
+        if(i.column() == 0) {
+            modelIndices.append(i);
+        }
+    }
+
     if(modelIndices.count() == 0) {
         return;
     }
@@ -298,7 +314,16 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
     _availablePodsSpinnerWidget->start();
     _localPodsSpinnerWidget->start();
 
-    QList<Pod> pods = _remotePods->pods(ui->tableViewRemote->selectionModel()->selectedRows(0));
+    QItemSelection itemSelection = ui->tableViewRemote->selectionModel()->selection();
+    QModelIndexList selectedModelIndices =_remotePodsProxyModel->mapSelectionToSource(itemSelection).indexes();
+    QModelIndexList modelIndices;
+    foreach(QModelIndex i, selectedModelIndices) {
+        if(i.column() == 0) {
+            modelIndices.append(i);
+        }
+    }
+
+    QList<Pod> pods = _remotePods->pods(modelIndices);
     metaObject()->invokeMethod(_podManager,
                                "installPods",
                                Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
@@ -311,7 +336,6 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
         _availablePodsSpinnerWidget->start();
         _localPodsSpinnerWidget->start();
 
-        QModelIndexList modelIndices = ui->tableViewRemote->selectionModel()->selectedRows(0);
         QList<Pod> pods;
         pods.append(podDialog.pod());
 
