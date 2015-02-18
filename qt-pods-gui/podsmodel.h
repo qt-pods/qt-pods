@@ -27,6 +27,7 @@
 #include <QList>
 
 class PodsModel : public QAbstractItemModel {
+    Q_OBJECT
 public:
     enum PodField {
        PodFieldName         = 0,
