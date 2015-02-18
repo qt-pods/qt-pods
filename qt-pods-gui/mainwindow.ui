@@ -147,7 +147,7 @@
          <normaloff>:/icons/icons/computer.svg</normaloff>:/icons/icons/computer.svg</iconset>
        </attribute>
        <attribute name="title">
-        <string>Local repositories</string>
+        <string>Repository pods</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
