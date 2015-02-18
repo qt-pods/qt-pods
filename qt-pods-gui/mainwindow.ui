@@ -639,6 +639,17 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonExportDiagnostics">
+            <property name="text">
+             <string>Export diagnostics</string>
+            </property>
+            <property name="icon">
+             <iconset resource="resources.qrc">
+              <normaloff>:/icons/icons/document-open.svg</normaloff>:/icons/icons/document-open.svg</iconset>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
