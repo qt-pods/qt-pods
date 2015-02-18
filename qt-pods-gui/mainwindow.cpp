@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _systemTrayIcon.setIcon(QIcon(":/icons/icons/system-upgrade.svg"));
     _systemTrayIcon.setToolTip("Qt Pods");
-    _systemTrayIcon.show();
+    //_systemTrayIcon.show();
 
     _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewRemote);
     _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewLocal);
@@ -372,6 +372,7 @@ void MainWindow::on_pushButtonExportDiagnostics_clicked() {
         QFile file(fileName);
         file.open(QFile::ReadWrite);
         if(file.isOpen()) {
+            file.write((ui->lineEditBuild->text() + "\n").toUtf8());
             file.write(ui->plainTextEditDiagnostic->toPlainText().toUtf8());
             file.waitForBytesWritten(30000);
             file.close();
