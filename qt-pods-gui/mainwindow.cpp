@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
     setObjectName("MainWindow");
+
     setupStdOutRedirect();
 
     _settings = new QSettings("qt-pods", "qt-pods");
@@ -86,6 +87,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     updateBuildInfo();
     loadSettings();
+
+#ifndef QT_DEBUG
+    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabDiagnostic));
+#endif
 }
 
 MainWindow::~MainWindow() {
@@ -98,13 +103,19 @@ void MainWindow::stdOutActivated(int fileDescriptor) {
     if(numberOfBytesRead > 0) {
         // Terminate buffer - just in case.
         readBuffer[numberOfBytesRead] = (char)0;
-
+#ifdef QT_DEBUG
         ui->plainTextEditDiagnostic->appendPlainText(readBuffer);
+
+#else
+        statusBar()->showMessage(readBuffer);
+#endif
     }
 }
 
 void MainWindow::updateBuildInfo() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[updateBuildInfo]";
+#endif
     QString buildString = QString("%1-%2 (built on %3 at %4)")
             .arg(GIT_VERSION)
 #ifdef QT_DEBUG
@@ -116,6 +127,7 @@ void MainWindow::updateBuildInfo() {
             .arg(__TIME__);
 
     ui->lineEditBuild->setText(buildString);
+    _buildString = buildString;
 }
 
 void MainWindow::setupStdOutRedirect() {
@@ -133,7 +145,9 @@ void MainWindow::setupStdOutRedirect() {
 }
 
 void MainWindow::on_pushButtonAddRepository_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonAddRepository_clicked]";
+#endif
     QString directory = QFileDialog::getExistingDirectory(this, tr("Add git repository"));
     if(!directory.isEmpty()) {
         if(!_podManager->isGitRepository(directory)) {
@@ -156,7 +170,9 @@ void MainWindow::on_pushButtonAddRepository_clicked() {
 }
 
 void MainWindow::on_pushButtonRemoveRepository_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonRemoveRepository_clicked]";
+#endif
     int confirmationResult = QMessageBox::warning(this,
         tr("Confirm removal"),
         tr("Are you sure you want to remove the repository \"%1\"?")
@@ -168,13 +184,17 @@ void MainWindow::on_pushButtonRemoveRepository_clicked() {
 }
 
 void MainWindow::on_comboBoxCurrentRepository_currentTextChanged(QString text) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_comboBoxCurrentRepository_currentTextChanged]";
-    setWindowTitle(QString("Qt Pods - %1").arg(text));
+#endif
+    setWindowTitle(QString("Qt Pods - %1 - %2").arg(text).arg(_buildString));
     refreshLocalPods();
 }
 
-void MainWindow::on_tabWidgetPods_currentChanged(int index) {
+void MainWindow::on_tabWidget_currentChanged(int index) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_tabWidgetPods_currentChanged]";
+#endif
     switch (index) {
     case 0:
         refreshLocalPods();
@@ -187,17 +207,23 @@ void MainWindow::on_tabWidgetPods_currentChanged(int index) {
 }
 
 void MainWindow::on_lineEditSearchLocal_textChanged(QString text) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_lineEditSearchLocal_textChanged]";
+#endif
     _localPodsProxyModel->setFilterWildcard(text);
 }
 
 void MainWindow::on_lineEditSearchRemote_textChanged(QString text) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_lineEditSearchRemote_textChanged]";
+#endif
     _remotePodsProxyModel->setFilterWildcard(text);
 }
 
 void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonRemoveLocalPods_clicked]";
+#endif
     QItemSelection itemSelection = ui->tableViewLocal->selectionModel()->selection();
     QModelIndexList selectedModelIndices = _localPodsProxyModel->mapSelectionToSource(itemSelection).indexes();
     QModelIndexList modelIndices;
@@ -238,7 +264,9 @@ void MainWindow::on_pushButtonRemoveLocalPods_clicked() {
 }
 
 void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonUpdateLocalPods_clicked]";
+#endif
     QItemSelection itemSelection = ui->tableViewLocal->selectionModel()->selection();
     QModelIndexList selectedModelIndices = _localPodsProxyModel->mapSelectionToSource(itemSelection).indexes();
     QModelIndexList modelIndices;
@@ -279,7 +307,9 @@ void MainWindow::on_pushButtonUpdateLocalPods_clicked() {
 }
 
 void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonRefreshLocalPods_clicked]";
+#endif
     ui->tableViewLocal->setEnabled(false);
     ui->pushButtonRemoveLocalPods->setEnabled(false);
     ui->pushButtonRefreshLocalPods->setEnabled(false);
@@ -292,7 +322,9 @@ void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
 }
 
 void MainWindow::on_pushButtonManageSources_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonManageSources_clicked]";
+#endif
     SourcesDialog sourcesDialog;
     QStringList sources = _settings->value("sources").toStringList();
 
@@ -309,7 +341,9 @@ void MainWindow::on_pushButtonManageSources_clicked() {
 }
 
 void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonRefreshAvailablePods_clicked]";
+#endif
     ui->tableViewRemote->setEnabled(false);
     ui->pushButtonInstallPods->setEnabled(false);
     ui->pushButtonRefreshAvailablePods->setEnabled(false);
@@ -322,7 +356,9 @@ void MainWindow::on_pushButtonRefreshAvailablePods_clicked() {
 }
 
 void MainWindow::on_pushButtonInstallPods_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonInstallPods_clicked]";
+#endif
     _availablePodsSpinnerWidget->start();
     _localPodsSpinnerWidget->start();
 
@@ -343,7 +379,9 @@ void MainWindow::on_pushButtonInstallPods_clicked() {
 }
 
 void MainWindow::on_pushButtonInstallExternalPod_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonInstallExternalPod_clicked]";
+#endif
     PodDialog podDialog;
     if(podDialog.exec() == QDialog::Accepted) {
         _availablePodsSpinnerWidget->start();
@@ -360,13 +398,17 @@ void MainWindow::on_pushButtonInstallExternalPod_clicked() {
 }
 
 void MainWindow::on_pushButtonReportIssue_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonReportIssue_clicked]";
+#endif
     QDesktopServices desktopServices;
     desktopServices.openUrl(QUrl("https://github.com/cybercatalyst/qt-pods/issues"));
 }
 
 void MainWindow::on_pushButtonExportDiagnostics_clicked() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_pushButtonExportDiagnostics_clicked]";
+#endif
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save diagnostics"), "diagnostics.txt", "*.txt");
     if(!fileName.isEmpty()) {
         QFile file(fileName);
@@ -391,7 +433,9 @@ void MainWindow::on_pushButtonExportDiagnostics_clicked() {
 }
 
 void MainWindow::on_tableViewLocal_doubleClicked(QModelIndex index) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_tableViewLocal_doubleClicked]";
+#endif
     PodDialog podDialog;
     podDialog.setPod(_localPods->pod(index));
     podDialog.setEditable(false);
@@ -399,7 +443,9 @@ void MainWindow::on_tableViewLocal_doubleClicked(QModelIndex index) {
 }
 
 void MainWindow::on_tableViewRemote_doubleClicked(QModelIndex index) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[on_tableViewRemote_doubleClicked]";
+#endif
     PodDialog podDialog;
     podDialog.setPod(_remotePods->pod(index));
     podDialog.setEditable(false);
@@ -407,20 +453,26 @@ void MainWindow::on_tableViewRemote_doubleClicked(QModelIndex index) {
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[closeEvent]";
+#endif
     saveSettings();
     QMainWindow::closeEvent(closeEvent);
 }
 
 void MainWindow::loadSettings() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[loadSettings]";
+#endif
     QStringList repositories = _settings->value("local-repositories").toStringList();
     ui->comboBoxCurrentRepository->addItems(repositories);
     ui->comboBoxCurrentRepository->setCurrentText(_settings->value("active-repository").toString());
 }
 
 void MainWindow::saveSettings() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[saveSettings]";
+#endif
     QStringList repositories;
     for(int i = 0; i < ui->comboBoxCurrentRepository->count(); i++) {
         repositories.append(ui->comboBoxCurrentRepository->itemText(i));
@@ -431,11 +483,13 @@ void MainWindow::saveSettings() {
 }
 
 void MainWindow::installPodsFinished(QString repository, QList<Pod> pods, bool success) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[installPodsFinished]";
+#endif
     _availablePodsSpinnerWidget->stop();
     _localPodsSpinnerWidget->stop();
 
-    ui->tabWidgetPods->setCurrentIndex(0);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tabLocalPods));
 
     if(success) {
         QMessageBox::information(this,
@@ -451,10 +505,12 @@ void MainWindow::installPodsFinished(QString repository, QList<Pod> pods, bool s
 }
 
 void MainWindow::removePodsFinished(QString repository, QStringList podNames, bool success) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[removePodsFinished]";
+#endif
     _localPodsSpinnerWidget->stop();
 
-    ui->tabWidgetPods->setCurrentIndex(0);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tabLocalPods));
 
     if(success) {
         QMessageBox::information(this,
@@ -470,10 +526,12 @@ void MainWindow::removePodsFinished(QString repository, QStringList podNames, bo
 }
 
 void MainWindow::updatePodsFinished(QString repository, QStringList podNames, bool success) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[updatePodsFinished]";
+#endif
     _localPodsSpinnerWidget->stop();
 
-    ui->tabWidgetPods->setCurrentIndex(0);
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tabLocalPods));
 
     if(success) {
         QMessageBox::information(this,
@@ -489,7 +547,9 @@ void MainWindow::updatePodsFinished(QString repository, QStringList podNames, bo
 }
 
 void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedPods) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[installedPodsFinished]";
+#endif
     Q_UNUSED(repository);
     _localPods->setModelData(installedPods);
     _localPodsSpinnerWidget->stop();
@@ -497,7 +557,9 @@ void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedP
 }
 
 void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> availablePods) {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[availablePodsFinished]";
+#endif
     Q_UNUSED(sources);
     _remotePods->setModelData(availablePods);
     _availablePodsSpinnerWidget->stop();
@@ -505,7 +567,9 @@ void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> available
 }
 
 void MainWindow::refreshLocalPods() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[refreshLocalPods]";
+#endif
     _localPodsSpinnerWidget->start();
 
     QString repository = ui->comboBoxCurrentRepository->currentText();
@@ -525,7 +589,9 @@ void MainWindow::refreshLocalPods() {
 }
 
 void MainWindow::refreshAvailablePods() {
+#ifdef QT_DEBUG
     qDebug() << __TIME__ << "[refreshAvailablePods]";
+#endif
     _availablePodsSpinnerWidget->start();
 
     QStringList sources = _settings->value("sources").toStringList();

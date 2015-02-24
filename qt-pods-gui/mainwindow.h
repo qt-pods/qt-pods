@@ -58,7 +58,7 @@ public slots:
     void on_lineEditSearchRemote_textChanged(QString text);
 
     void on_comboBoxCurrentRepository_currentTextChanged(QString text);
-    void on_tabWidgetPods_currentChanged(int index);
+    void on_tabWidget_currentChanged(int index);
 
     void on_pushButtonUpdateLocalPods_clicked();
     void on_pushButtonRefreshLocalPods_clicked();
@@ -95,11 +95,12 @@ private:
     void refreshLocalPods();
     void refreshAvailablePods();
 
-
     QSocketNotifier *_stdOutSocketNotifier;
     QSystemTrayIcon _systemTrayIcon;
     QThread *_workerThread;
     QSettings *_settings;
+
+    QString _buildString;
 
     PodManager *_podManager;
     PodsModel *_localPods;

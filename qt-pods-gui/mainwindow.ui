@@ -90,6 +90,15 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButtonAddRepository">
+        <property name="toolTip">
+         <string>Track an already existing project (only git repositories).</string>
+        </property>
+        <property name="statusTip">
+         <string>Track an already existing project (only git repositories).</string>
+        </property>
+        <property name="whatsThis">
+         <string>Track an already existing project (only git repositories).</string>
+        </property>
         <property name="text">
          <string>Track</string>
         </property>
@@ -104,6 +113,15 @@
         <property name="enabled">
          <bool>false</bool>
         </property>
+        <property name="toolTip">
+         <string>Create and track a new repository.</string>
+        </property>
+        <property name="statusTip">
+         <string>Create and track a new repository.</string>
+        </property>
+        <property name="whatsThis">
+         <string>Create and track a new repository.</string>
+        </property>
         <property name="text">
          <string>Create new</string>
         </property>
@@ -116,7 +134,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabWidgetPods">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
       </property>
