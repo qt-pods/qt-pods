@@ -28,15 +28,13 @@ SOURCES += \
     mainwindow.cpp \
     podsmodel.cpp \
     poddialog.cpp \
-    sourcesdialog.cpp \
-    createnewrepositorydialog.cpp
+    sourcesdialog.cpp
 
 HEADERS += \
     mainwindow.h \
     podsmodel.h \
     poddialog.h \
-    sourcesdialog.h \
-    createnewrepositorydialog.h
+    sourcesdialog.h
 
 FORMS += mainwindow.ui \
     poddialog.ui \
