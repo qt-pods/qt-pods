@@ -8,6 +8,8 @@ qt-pods is an attempt to unify the packaging of fragments of Qt sources.
 Inspired by the cocoapods project, each "pod" follows a strict rule of how
 its contents are made up, so everyone can easily package her/his code and share
 it with other developers.
+## Prebuild preview
+MacOSX Yosemite: http://qt-pods.org/downloads/qtpods-macosx-76d1de6-release.zip
 
 ## How to build
 Clone repository recursively:
