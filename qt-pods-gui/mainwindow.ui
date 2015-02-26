@@ -48,6 +48,15 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Select the current target repository.</string>
+        </property>
+        <property name="statusTip">
+         <string>Select the current target repository.</string>
+        </property>
+        <property name="whatsThis">
+         <string>Select the current target repository.</string>
+        </property>
         <property name="styleSheet">
          <string notr="true"/>
         </property>
@@ -71,6 +80,12 @@
          </size>
         </property>
         <property name="toolTip">
+         <string>Untrack selected repository. The repository will not be removed on disk.</string>
+        </property>
+        <property name="statusTip">
+         <string>Untrack selected repository. The repository will not be removed on disk.</string>
+        </property>
+        <property name="whatsThis">
          <string>Untrack selected repository. The repository will not be removed on disk.</string>
         </property>
         <property name="text">
@@ -121,6 +136,15 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="statusTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string/>
+      </property>
       <property name="tabShape">
        <enum>QTabWidget::Rounded</enum>
       </property>
@@ -137,6 +161,15 @@
        <bool>true</bool>
       </property>
       <widget class="QWidget" name="tabLocalPods">
+       <property name="toolTip">
+        <string>View and manage locally installed pods.</string>
+       </property>
+       <property name="statusTip">
+        <string>View and manage locally installed pods.</string>
+       </property>
+       <property name="whatsThis">
+        <string>View and manage locally installed pods.</string>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/icons/icons/computer.svg</normaloff>:/icons/icons/computer.svg</iconset>
@@ -332,6 +365,15 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tabAvailablePods">
+       <property name="toolTip">
+        <string>Access pods available through the specified pod sources.</string>
+       </property>
+       <property name="statusTip">
+        <string>Access pods available through the specified pod sources.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Access pods available through the specified pod sources.</string>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/icons/icons/network_local.svg</normaloff>:/icons/icons/network_local.svg</iconset>
@@ -572,7 +614,150 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabDevelopmentTools">
+       <property name="toolTip">
+        <string>Tools for pod developers.</string>
+       </property>
+       <property name="statusTip">
+        <string>Tools for pod developers.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Tools for pod developers.</string>
+       </property>
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/file-manager.svg</normaloff>:/icons/icons/file-manager.svg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Pod developers</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Pod:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEditDevelopmentPodRoot">
+            <property name="toolTip">
+             <string>The root directory of the local pod in development.</string>
+            </property>
+            <property name="statusTip">
+             <string>The root directory of the local pod in development.</string>
+            </property>
+            <property name="whatsThis">
+             <string>The root directory of the local pod in development.</string>
+            </property>
+            <property name="placeholderText">
+             <string>/home/user/development/podroot</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QToolButton" name="toolButtonChooseDevelopmentPodRoot">
+            <property name="toolTip">
+             <string>Choose the root directory of the local pod in development.</string>
+            </property>
+            <property name="statusTip">
+             <string>Choose the root directory of the local pod in development.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Choose the root directory of the local pod in development.</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QPushButton" name="pushButtonDevelopmentPodSanityCheck">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="toolTip">
+             <string>Perform a sanity check on the pod to find whether it meets the pod rules.</string>
+            </property>
+            <property name="statusTip">
+             <string>Perform a sanity check on the pod to find whether it meets the pod rules.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Perform a sanity check on the pod to find whether it meets the pod rules.</string>
+            </property>
+            <property name="text">
+             <string>Sanity check</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonDevelopmentPodInstall">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="toolTip">
+             <string>Install this pod to the current target.</string>
+            </property>
+            <property name="statusTip">
+             <string>Install this pod to the current target.</string>
+            </property>
+            <property name="whatsThis">
+             <string>Install this pod to the current target.</string>
+            </property>
+            <property name="text">
+             <string>Install</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPlainTextEdit" name="plainTextEditDevelopmentPod">
+          <property name="toolTip">
+           <string>Pod development output.</string>
+          </property>
+          <property name="statusTip">
+           <string>Pod development output.</string>
+          </property>
+          <property name="whatsThis">
+           <string>Pod development output.</string>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabDiagnostic">
+       <property name="toolTip">
+        <string>Debugging information for developers.</string>
+       </property>
+       <property name="statusTip">
+        <string>Debugging information for developers.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Debugging information for developers.</string>
+       </property>
        <attribute name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/icons/icons/gnome-system.svg</normaloff>:/icons/icons/gnome-system.svg</iconset>
@@ -696,10 +881,7 @@
            <string>The diagnostics log shows what is running behind the scenes.</string>
           </property>
           <property name="styleSheet">
-           <string notr="true">QPlainTextEdit {
-	background: black;
-	color: white;
-}</string>
+           <string notr="true"/>
           </property>
           <property name="readOnly">
            <bool>true</bool>

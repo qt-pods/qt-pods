@@ -63,6 +63,22 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(availablePodsFinished(QStringList,QList<Pod>)));
 
     ui->setupUi(this);
+    ui->tabWidget->setTabToolTip(ui->tabWidget->indexOf(ui->tabLocalPods),
+                                 tr("Manage locally installed pods."));
+    ui->tabWidget->setTabWhatsThis(ui->tabWidget->indexOf(ui->tabLocalPods),
+                                 tr("Manage locally installed pods."));
+    ui->tabWidget->setTabToolTip(ui->tabWidget->indexOf(ui->tabAvailablePods),
+                                 tr("View and install from a list of available pods."));
+    ui->tabWidget->setTabWhatsThis(ui->tabWidget->indexOf(ui->tabAvailablePods),
+                                 tr("View and install from a list of available pods."));
+    ui->tabWidget->setTabToolTip(ui->tabWidget->indexOf(ui->tabDevelopmentTools),
+                                 tr("Pod developers tools."));
+    ui->tabWidget->setTabWhatsThis(ui->tabWidget->indexOf(ui->tabDevelopmentTools),
+                                 tr("Pod developers tools."));
+    ui->tabWidget->setTabToolTip(ui->tabWidget->indexOf(ui->tabDiagnostic),
+                                 tr("Debug information for developers."));
+    ui->tabWidget->setTabWhatsThis(ui->tabWidget->indexOf(ui->tabDiagnostic),
+                                 tr("Debug information for developers."));
 
     _localPods = new PodsModel();
     _remotePods = new PodsModel();
@@ -82,8 +98,9 @@ MainWindow::MainWindow(QWidget *parent) :
     _systemTrayIcon.setToolTip("Qt Pods");
     //_systemTrayIcon.show();
 
-    _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewRemote);
-    _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tableViewLocal);
+    _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabAvailablePods);
+    _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabLocalPods);
+    _developmentToolsSpinnerWidget = new WaitingSpinnerWidget(ui->tabDevelopmentTools);
 
     updateBuildInfo();
     loadSettings();
@@ -316,6 +333,7 @@ void MainWindow::on_pushButtonRefreshLocalPods_clicked() {
 
     refreshLocalPods();
 
+
     ui->tableViewLocal->setEnabled(true);
     ui->pushButtonRemoveLocalPods->setEnabled(true);
     ui->pushButtonRefreshLocalPods->setEnabled(true);
@@ -452,6 +470,66 @@ void MainWindow::on_tableViewRemote_doubleClicked(QModelIndex index) {
     podDialog.exec();
 }
 
+void MainWindow::on_toolButtonChooseDevelopmentPodRoot_clicked() {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[on_toolButtonChooseDevelopmentPodRoot_clicked]";
+#endif
+
+    QString podRoot = QFileDialog::getExistingDirectory(this, tr("Choose pod root directory"));
+    if(!podRoot.isEmpty()) {
+        ui->lineEditDevelopmentPodRoot->setText(podRoot);
+    }
+}
+
+void MainWindow::on_lineEditDevelopmentPodRoot_textChanged(QString text) {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[on_lineEditDevelopmentPodRoot_textChanged]";
+#endif
+    QFileInfo fileInfo(text);
+
+    if(fileInfo.exists() && fileInfo.isDir()) {
+        ui->lineEditDevelopmentPodRoot->setStyleSheet("color: green;");
+        ui->pushButtonDevelopmentPodInstall->setEnabled(true);
+        //ui->pushButtonDevelopmentPodSanityCheck->setEnabled(true);
+    } else {
+        ui->lineEditDevelopmentPodRoot->setStyleSheet("color: red;");
+        ui->pushButtonDevelopmentPodInstall->setEnabled(false);
+        ui->pushButtonDevelopmentPodSanityCheck->setEnabled(false);
+    }
+}
+
+void MainWindow::on_pushButtonDevelopmentPodSanityCheck_clicked() {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[on_pushButtonDevelopmentPodSanityCheck_clicked]";
+#endif
+
+    // TODO: Implement maybe in core.
+}
+
+void MainWindow::on_pushButtonDevelopmentPodInstall_clicked() {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[on_pushButtonDevelopmentPodInstall_clicked]";
+#endif
+    _availablePodsSpinnerWidget->start();
+    _localPodsSpinnerWidget->start();
+    _developmentToolsSpinnerWidget->start();
+
+    QList<Pod> pods;
+
+    QFileInfo fileInfo(ui->lineEditDevelopmentPodRoot->text());
+    if(fileInfo.exists() && fileInfo.isDir()) {
+        Pod pod;
+        pod.url = ui->lineEditDevelopmentPodRoot->text();
+        pod.description = tr("Development pod at %1").arg(fileInfo.absolutePath());
+        pod.name = fileInfo.fileName();
+        pods.append(pod);
+        metaObject()->invokeMethod(_podManager,
+                                   "installPods",
+                                   Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
+                                   Q_ARG(QList<Pod>, pods));
+    }
+}
+
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
 #ifdef QT_DEBUG
     qDebug() << __TIME__ << "[closeEvent]";
@@ -488,6 +566,7 @@ void MainWindow::installPodsFinished(QString repository, QList<Pod> pods, bool s
 #endif
     _availablePodsSpinnerWidget->stop();
     _localPodsSpinnerWidget->stop();
+    _developmentToolsSpinnerWidget->stop();
 
     ui->tabWidget->setCurrentIndex(ui->tabWidget->indexOf(ui->tabLocalPods));
 
