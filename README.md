@@ -14,6 +14,11 @@ it with other developers.
 #qtpods on irc.freenode.net:6667
 ```
 
+## Mailing list
+```
+qtpods-dev@googlegroups.com
+```
+
 ## Prebuild preview
 MacOSX Yosemite: http://qt-pods.org/downloads/qtpods-macosx-76d1de6-release.zip
 
