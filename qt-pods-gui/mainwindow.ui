@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>723</width>
-    <height>617</height>
+    <width>909</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -628,6 +628,46 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabDevelopment">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/setroubleshoot_icon.svg</normaloff>:/icons/icons/setroubleshoot_icon.svg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Development</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLineEdit" name="lineEditDevelopmentUrl"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonDevelopmentBack">
+            <property name="text">
+             <string>Back</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWebView" name="webViewDevelopment">
+          <property name="url">
+           <url>
+            <string>about:blank</string>
+           </url>
+          </property>
+          <property name="zoomFactor">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="renderHints">
+           <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabDevelopmentTools">
        <property name="toolTip">
         <string>Tools for pod developers.</string>
@@ -916,6 +956,11 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKitWidgets/QWebView</header>
+  </customwidget>
+  <customwidget>
    <class>IRCWidget</class>
    <extends>QWidget</extends>
    <header>ircwidget.h</header>
@@ -925,5 +970,22 @@
  <resources>
   <include location="resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButtonDevelopmentBack</sender>
+   <signal>clicked()</signal>
+   <receiver>webViewDevelopment</receiver>
+   <slot>back()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>845</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>454</x>
+     <y>367</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

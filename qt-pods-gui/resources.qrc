@@ -15,5 +15,6 @@
         <file>icons/file_new.svg</file>
         <file>icons/appicon.svg</file>
         <file>icons/empathy.svg</file>
+        <file>icons/setroubleshoot_icon.svg</file>
     </qresource>
 </RCC>
