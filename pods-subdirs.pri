@@ -5,5 +5,6 @@
 
 SUBDIRS += \
 	qt-pods-core \
+	qtirc \
 	qtwaitingspinner 
 

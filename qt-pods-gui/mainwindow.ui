@@ -614,6 +614,20 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tabCommunityChat">
+       <attribute name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/icons/empathy.svg</normaloff>:/icons/icons/empathy.svg</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Community chat</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="IRCWidget" name="ircWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabDevelopmentTools">
        <property name="toolTip">
         <string>Tools for pod developers.</string>
@@ -900,6 +914,14 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>IRCWidget</class>
+   <extends>QWidget</extends>
+   <header>ircwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

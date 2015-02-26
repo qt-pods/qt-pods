@@ -108,6 +108,8 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifndef QT_DEBUG
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabDiagnostic));
 #endif
+
+    ui->ircWidget->connectToServer("irc.freenode.net", "qtpodsuser", "#qtpods");
 }
 
 MainWindow::~MainWindow() {

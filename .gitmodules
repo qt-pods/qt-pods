@@ -4,3 +4,6 @@
 [submodule "qtwaitingspinner"]
 	path = qtwaitingspinner
 	url = https://github.com/cybercatalyst/qtwaitingspinner.git
+[submodule "qtirc"]
+	path = qtirc
+	url = https://github.com/cybercatalyst/qtirc.git

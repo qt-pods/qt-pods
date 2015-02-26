@@ -14,5 +14,6 @@
         <file>icons/gnome-system.svg</file>
         <file>icons/file_new.svg</file>
         <file>icons/appicon.svg</file>
+        <file>icons/empathy.svg</file>
     </qresource>
 </RCC>
