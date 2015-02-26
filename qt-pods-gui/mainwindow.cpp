@@ -119,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabDiagnostic));
 #endif
 
-    ui->ircWidget->connectToServer("irc.freenode.net", "qtpodsuser", "#qtpods");
+    ui->ircWidget->connectToServer("qtpodsuser", "irc.freenode.net", 6667, "#qtpods");
     ui->webViewDevelopment->setPage(new CustomWebPage);
     ui->webViewDevelopment->load(QUrl("https://github.com/cybercatalyst/qt-pods/issues"));
 }
