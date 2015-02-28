@@ -20,7 +20,7 @@ qtpods-dev@googlegroups.com
 ```
 
 ## Prebuild preview
-* Ubuntu 14.04: http://qt-pods.org/downloads/qt-pods-gnu-linux-64bit-940f0dc-release.tar.lzma
+* Ubuntu 14.04: http://qt-pods.org/downloads/qt-pods-gui_0.1-ubuntu_amd64.deb
 * MacOSX Yosemite: http://qt-pods.org/downloads/qtpods-macosx-76d1de6-release.zip
 
 ## How to build
