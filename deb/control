@@ -1,0 +1,11 @@
+Package: qt-pods-gui
+Version: 0.1-ubuntu
+Section: devel
+Maintainer: Jacob Dawid <jacob@qt-pods.org>
+Homepage: http://qt-pods.org/
+Priority: standard
+Architecture: amd64
+Depends: libxdmcp6 (>=1:1.1.1), libxau6 (>=1:1.0.8), liborc-0.4-0 (>=1:0.4.18), liblzma5 (>=5.1.1), libdrm2 (>=2.4.56), libxxf86vm1 (>=1:1.1.3), libxshmfence1 (>=1.1), libxcb-sync1 (>=1.10), libxcb-present0 (>=1.10), libxcb-dri3-0 (>=1.10), libxcb-dri2-0 (>=1.10), libxcb-glx0 (>=1.10), libx11-xcb1 (>=2:1.6.2), libxfixes3 (>=1:5.0.1), libxdamage1 (>=1:1.1.4), libxext6 (>=2:1.3.2), libglapi-mesa (>=10.1.3), libxcb1 (>=1), libpcre3 (>=1:8.31), libffi6 (>=3), libqt5sql5 (>=5.0.0), libqt5qml5 (>=5.0.0), libqt5quick5 (>=5.0.0), libqt5positioning5 (>=5.0.0), libgstreamer-plugins-base0.10-0 (>=0.10), libgstreamer0.10-0 (>=0.10), libxml2 (>=2.9), libxslt1.1 (>=1.1), libxcomposite1 (>=1:0.4.4), libxrender1 (>=1:0.9.8), zlib1g (>=1:1), libicu52 (>=52), libgl1-mesa-glx (>=10.1.3), libx11-6 (>=2:1.6.2), libglib2.0-0 (>=2.4.0), libqt5opengl5 (>=5.0.0), libqt5printsupport5 (>=5.0.0), libqt5sensors5 (>=5.0.0), libgcc1 (>=1:4.9.1), libstdc++6 (>=4.8.2), libc6 (>=2.1.9), qtbase5-dev (>=5.0.0), libqt5widgets5 (>=5.0.0), libqt5webkit5 (>=5.0.0)
+Description: QtPods package manager
+ QtPods is a graphical package manager for installing and creating Qt pods.
+

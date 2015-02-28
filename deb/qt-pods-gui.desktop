@@ -1,0 +1,10 @@
+Name=QtPods
+Version=1.0
+Exec=/bin/qt-pods
+Comment=QtPods pod manager.
+Icon=/usr/share/icons/qtpods/appicon.svg
+Type=Application
+Terminal=false
+StartupNotify=true
+Encoding=UTF-8
+Categories=
