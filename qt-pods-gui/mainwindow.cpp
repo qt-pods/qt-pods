@@ -48,10 +48,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow) {
     setObjectName("MainWindow");
 
+    // Redirect all messages from console
     setupStdOutRedirect();
 
+    // Application settings object
     _settings = new QSettings("qt-pods", "qt-pods");
 
+    // Create pod manager and move it to a background thread
     _workerThread = new QThread();
     _podManager = new PodManager();
     _podManager->moveToThread(_workerThread);
@@ -63,11 +66,12 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(removePodsFinished(QString, QStringList,bool)));
     connect(_podManager, SIGNAL(updatePodsFinished(QString, QStringList, bool)),
             this, SLOT(updatePodsFinished(QString, QStringList, bool)));
-    connect(_podManager, SIGNAL(installedPodsFinished(QString, QList<Pod>)),
-            this, SLOT(installedPodsFinished(QString,QList<Pod>)));
-    connect(_podManager, SIGNAL(availablePodsFinished(QStringList, QList<Pod>)),
-            this, SLOT(availablePodsFinished(QStringList,QList<Pod>)));
+    connect(_podManager, SIGNAL(listInstalledPodsFinished(QString, QList<Pod>)),
+            this, SLOT(listInstalledPodsFinished(QString,QList<Pod>)));
+    connect(_podManager, SIGNAL(listAvailablePodsFinished(QStringList, QList<Pod>)),
+            this, SLOT(listAvailablePodsFinished(QStringList,QList<Pod>)));
 
+    // UI setup
     ui->setupUi(this);
     ui->tabWidget->setTabToolTip(ui->tabWidget->indexOf(ui->tabLocalPods),
                                  tr("Manage locally installed pods."));
@@ -102,7 +106,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _systemTrayIcon.setIcon(QIcon(":/icons/icons/system-upgrade.svg"));
     _systemTrayIcon.setToolTip("Qt Pods");
-    //_systemTrayIcon.show();
+    _systemTrayIcon.show();
 
     _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabAvailablePods);
     _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabLocalPods);
@@ -657,7 +661,7 @@ void MainWindow::updatePodsFinished(QString repository, QStringList podNames, bo
     refreshLocalPods();
 }
 
-void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedPods) {
+void MainWindow::listInstalledPodsFinished(QString repository, QList<Pod> installedPods) {
 #ifdef QT_DEBUG
     qDebug() << __TIME__ << "[installedPodsFinished]";
 #endif
@@ -667,7 +671,7 @@ void MainWindow::installedPodsFinished(QString repository, QList<Pod> installedP
     ui->tableViewLocal->resizeColumnsToContents();
 }
 
-void MainWindow::availablePodsFinished(QStringList sources, QList<Pod> availablePods) {
+void MainWindow::listAvailablePodsFinished(QStringList sources, QList<Pod> availablePods) {
 #ifdef QT_DEBUG
     qDebug() << __TIME__ << "[availablePodsFinished]";
 #endif
@@ -696,7 +700,7 @@ void MainWindow::refreshLocalPods() {
         return;
     }
 
-    metaObject()->invokeMethod(_podManager, "installedPods", Q_ARG(QString, repository));
+    metaObject()->invokeMethod(_podManager, "listInstalledPods", Q_ARG(QString, repository));
 }
 
 void MainWindow::refreshAvailablePods() {
@@ -710,6 +714,6 @@ void MainWindow::refreshAvailablePods() {
         sources << "http://qt-pods.org/pods.json";
     }
 
-    metaObject()->invokeMethod(_podManager, "availablePods", Q_ARG(QStringList, sources));
+    metaObject()->invokeMethod(_podManager, "listAvailablePods", Q_ARG(QStringList, sources));
 }
 

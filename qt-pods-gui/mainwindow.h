@@ -96,8 +96,8 @@ private slots:
     void installPodsFinished(QString repository, QList<Pod> pods, bool success);
     void removePodsFinished(QString repository, QStringList podNames, bool success);
     void updatePodsFinished(QString repository, QStringList podNames, bool success);
-    void installedPodsFinished(QString repository, QList<Pod> installedPods);
-    void availablePodsFinished(QStringList sources, QList<Pod> availablePods);
+    void listInstalledPodsFinished(QString repository, QList<Pod> installedPods);
+    void listAvailablePodsFinished(QStringList sources, QList<Pod> availablePods);
 
 private:
     void updateBuildInfo();

@@ -89,13 +89,13 @@ int main(int argc, char *argv[]) {
         return 1;
     } else
     if(parser.isSet(listOption)) {
-        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        QList<Pod> pods = podManager.listInstalledPods(repositoryPath);
         foreach(Pod pod, pods) {
             std::cout << pod.name.toStdString() << std::endl;
         }
     } else
     if(parser.isSet(searchOption)) {
-        QList<Pod> pods = podManager.availablePods(sources);
+        QList<Pod> pods = podManager.listAvailablePods(sources);
         std::cout << "The following pods are available and match your criteria:" << std::endl;
         QRegExp regExp(parser.value(searchOption), Qt::CaseInsensitive, QRegExp::Wildcard);
         foreach(Pod pod, pods) {
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
         }
     } else
     if(parser.isSet(installOption)) {
-        QList<Pod> pods = podManager.availablePods(sources);
+        QList<Pod> pods = podManager.listAvailablePods(sources);
         foreach(Pod pod, pods) {
             if(pod.name == parser.value(installOption)) {
                 bool result = podManager.installPod(repositoryPath, pod);
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
         return 3;
     } else
     if(parser.isSet(removeOption)) {
-        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        QList<Pod> pods = podManager.listInstalledPods(repositoryPath);
         foreach(Pod pod, pods) {
             if(pod.name == parser.value(removeOption)) {
                 bool result = podManager.removePod(repositoryPath, pod.name);
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
         return 3;
     } else
     if(parser.isSet(updateOption)) {
-        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        QList<Pod> pods = podManager.listInstalledPods(repositoryPath);
         foreach(Pod pod, pods) {
             if(pod.name == parser.value(updateOption)) {
                 bool result = podManager.updatePod(repositoryPath, pod.name);
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
         return 3;
     } else
     if(parser.isSet(checkOption)) {
-        QList<Pod> pods = podManager.installedPods(repositoryPath);
+        QList<Pod> pods = podManager.listInstalledPods(repositoryPath);
         foreach(Pod pod, pods) {
             if(pod.name == parser.value(checkOption)) {
                 bool result = podManager.checkPod(repositoryPath, pod.name);
