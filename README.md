@@ -1,5 +1,10 @@
 [![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)
 
+Support this and other free software projects of mine by donating bitcoins:
+```cpp
+1HdLeSj4SfRC77tb6pDUPqeXGiw3T2RqrG
+```
+
 ## qt-pods ([http://www.qt-pods.org](http://www.qt-pods.org))
 
 ![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
