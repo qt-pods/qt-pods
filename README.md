@@ -2,7 +2,7 @@
 
 Support this and other free software projects of mine by donating bitcoins:
 ```cpp
-1HdLeSj4SfRC77tb6pDUPqeXGiw3T2RqrG
+1Hk5EkcZRaio4uGXSU453E1bNFTecsZEpt
 ```
 
 ## qt-pods ([http://www.qt-pods.org](http://www.qt-pods.org))
