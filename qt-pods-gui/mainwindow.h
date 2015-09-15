@@ -55,6 +55,7 @@ public slots:
     // Local repository management
     void on_pushButtonAddRepository_clicked();
     void on_pushButtonRemoveRepository_clicked();
+    void on_pushButtonNewProject_clicked();
     void on_comboBoxCurrentRepository_currentTextChanged(QString text);
     void on_tabWidget_currentChanged(int index);
 
@@ -98,6 +99,7 @@ private slots:
     void updatePodsFinished(QString repository, QStringList podNames, bool success);
     void listInstalledPodsFinished(QString repository, QList<Pod> installedPods);
     void listAvailablePodsFinished(QStringList sources, QList<Pod> availablePods);
+    void createProjectFinished(QString repository, bool success);
 
 private:
     void updateBuildInfo();

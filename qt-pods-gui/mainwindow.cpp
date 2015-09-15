@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(listInstalledPodsFinished(QString,QList<Pod>)));
     connect(_podManager, SIGNAL(listAvailablePodsFinished(QStringList, QList<Pod>)),
             this, SLOT(listAvailablePodsFinished(QStringList,QList<Pod>)));
+    connect(_podManager, SIGNAL(createProjectFinished(QString,bool)),
+            this, SLOT(createProjectFinished(QString,bool)));
 
     // UI setup
     ui->setupUi(this);
@@ -215,6 +217,18 @@ void MainWindow::on_pushButtonRemoveRepository_clicked() {
     if(confirmationResult == QMessageBox::Yes) {
         ui->comboBoxCurrentRepository->removeItem(ui->comboBoxCurrentRepository->currentIndex());
         saveSettings();
+    }
+}
+
+void MainWindow::on_pushButtonNewProject_clicked() {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[on_pushButtonNewRepository_clicked]";
+#endif
+
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Choose a folder to create the project in"));
+    if(!directory.isEmpty()) {
+        metaObject()->invokeMethod(_podManager, "createProject",
+                                   Q_ARG(QString, directory));
     }
 }
 
@@ -679,6 +693,23 @@ void MainWindow::listAvailablePodsFinished(QStringList sources, QList<Pod> avail
     _remotePods->setModelData(availablePods);
     _availablePodsSpinnerWidget->stop();
     ui->tableViewRemote->resizeColumnsToContents();
+}
+
+void MainWindow::createProjectFinished(QString repository, bool success) {
+#ifdef QT_DEBUG
+    qDebug() << __TIME__ << "[refreshLocalPods]";
+#endif
+    if(success) {
+        ui->comboBoxCurrentRepository->addItem(repository);
+        ui->comboBoxCurrentRepository->setCurrentText(repository);
+        QMessageBox::information(this,
+            tr("Successfully created project"),
+            tr("Project has been created in \"%1\".").arg(repository));
+    } else {
+        QMessageBox::critical(this,
+            tr("Could not create project"),
+            tr("Failed to create project in \"%1\".").arg(repository));
+    }
 }
 
 void MainWindow::refreshLocalPods() {

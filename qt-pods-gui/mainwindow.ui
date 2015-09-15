@@ -123,6 +123,17 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonNewProject">
+        <property name="text">
+         <string>New Project</string>
+        </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/icons/emblem-favorite.svg</normaloff>:/icons/icons/emblem-favorite.svg</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>

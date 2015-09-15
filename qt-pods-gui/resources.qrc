@@ -16,5 +16,6 @@
         <file>icons/appicon.svg</file>
         <file>icons/empathy.svg</file>
         <file>icons/setroubleshoot_icon.svg</file>
+        <file>icons/emblem-favorite.svg</file>
     </qresource>
 </RCC>
