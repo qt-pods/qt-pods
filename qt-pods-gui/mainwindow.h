@@ -84,9 +84,6 @@ public slots:
     void on_pushButtonDevelopmentPodSanityCheck_clicked();
     void on_pushButtonDevelopmentPodInstall_clicked();
 
-    void on_webViewDevelopment_urlChanged(QUrl url);
-    void on_lineEditDevelopmentUrl_returnPressed();
-
 protected:
     void closeEvent(QCloseEvent *closeEvent);
 
@@ -128,7 +125,6 @@ private:
     WaitingSpinnerWidget *_availablePodsSpinnerWidget;
     WaitingSpinnerWidget *_localPodsSpinnerWidget;
     WaitingSpinnerWidget *_developmentToolsSpinnerWidget;
-    WaitingSpinnerWidget *_webViewSpinnerWidget;
 
     Ui::MainWindow *ui;
 };

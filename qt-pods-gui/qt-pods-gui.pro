@@ -18,7 +18,7 @@
 ##                                                                           ##
 ##############################################################################/
 
-QT  += core gui network widgets webkitwidgets svg
+QT  += core gui network widgets svg
 
 TARGET = qt-pods-gui
 TEMPLATE = app

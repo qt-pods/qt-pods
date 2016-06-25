@@ -4,6 +4,5 @@
 # This file should be put under version control.
 
 include(qt-pods-core/qt-pods-core.pri)
-include(qtirc/qtirc.pri)
 include(qtwaitingspinner/qtwaitingspinner.pri)
 

@@ -4,12 +4,6 @@ description=Qt Pods managment functions.
 license=GPLv3
 website=
 
-[qtirc]
-author=Jacob Dawid
-description=IRC chat client.
-license=GPLv3
-website=
-
 [qtwaitingspinner]
 author="Alexander Turkin, William Hallatt, Jacob Dawid"
 description=Floating waiting spinner widget.

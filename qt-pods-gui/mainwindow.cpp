@@ -37,12 +37,6 @@
 #include <unistd.h>
 #endif
 
-class CustomWebPage : public QWebPage {
-    virtual QString userAgentForUrl(const QUrl&) const {
-        return "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
-    }
-};
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow) {
@@ -113,10 +107,6 @@ MainWindow::MainWindow(QWidget *parent) :
     _availablePodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabAvailablePods);
     _localPodsSpinnerWidget = new WaitingSpinnerWidget(ui->tabLocalPods);
     _developmentToolsSpinnerWidget = new WaitingSpinnerWidget(ui->tabDevelopmentTools);
-    _webViewSpinnerWidget = new WaitingSpinnerWidget(ui->webViewDevelopment);
-
-    connect(ui->webViewDevelopment, SIGNAL(loadStarted()), _webViewSpinnerWidget, SLOT(start()));
-    connect(ui->webViewDevelopment, SIGNAL(loadFinished(bool)), _webViewSpinnerWidget, SLOT(stop()));
 
     updateBuildInfo();
     loadSettings();
@@ -124,10 +114,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifndef QT_DEBUG
     ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->tabDiagnostic));
 #endif
-
-    ui->ircWidget->connectToServer("qtpodsuser", "irc.freenode.net", 6667, "#qtpods");
-    ui->webViewDevelopment->setPage(new CustomWebPage);
-    ui->webViewDevelopment->load(QUrl("https://github.com/cybercatalyst/qt-pods/issues"));
 }
 
 MainWindow::~MainWindow() {
@@ -560,24 +546,6 @@ void MainWindow::on_pushButtonDevelopmentPodInstall_clicked() {
                                    Q_ARG(QString, ui->comboBoxCurrentRepository->currentText()),
                                    Q_ARG(QList<Pod>, pods));
     }
-}
-
-void MainWindow::on_webViewDevelopment_urlChanged(QUrl url) {
-#ifdef QT_DEBUG
-    qDebug() << __TIME__ << "[on_webViewDevelopment_urlChanged]";
-#endif
-    ui->lineEditDevelopmentUrl->setText(url.toString());
-}
-
-void MainWindow::on_lineEditDevelopmentUrl_returnPressed() {
-#ifdef QT_DEBUG
-    qDebug() << __TIME__ << "[on_lineEditDevelopmentUrl_returnPressed]";
-#endif
-    QString urlString = ui->lineEditDevelopmentUrl->text();
-    if(!urlString.startsWith("http")) {
-        urlString.prepend("http://");
-    }
-    ui->webViewDevelopment->load(QUrl(urlString));
 }
 
 void MainWindow::closeEvent(QCloseEvent *closeEvent) {
