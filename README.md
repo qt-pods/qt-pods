@@ -1,5 +1,7 @@
 [![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)
 
+[![Build status](https://travis-ci.org/pixraider/qt-pods.svg?branch=master)](https://travis-ci.org/pixraider/qt-pods)
+
 Support this and other free software projects of mine by donating bitcoins:
 ```cpp
 1Hk5EkcZRaio4uGXSU453E1bNFTecsZEpt
