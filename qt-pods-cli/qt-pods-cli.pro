@@ -67,3 +67,29 @@ unix {
         icon.path = $$DATADIR/icons/hicolor/32x32/apps
         icon.files += images/$${TARGET}.png
 }
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../qt-pods-core/release/ -lqt-pods-core
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../qt-pods-core/debug/ -lqt-pods-core
+else:unix: LIBS += -L$$OUT_PWD/../qt-pods-core/ -lqt-pods-core
+
+INCLUDEPATH += $$PWD/../qt-pods-core
+DEPENDPATH += $$PWD/../qt-pods-core
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qt-pods-core/release/libqt-pods-core.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qt-pods-core/debug/libqt-pods-core.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qt-pods-core/release/qt-pods-core.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qt-pods-core/debug/qt-pods-core.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../qt-pods-core/libqt-pods-core.a
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../qtwaitingspinner/release/ -lqtwaitingspinner
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../qtwaitingspinner/debug/ -lqtwaitingspinner
+else:unix: LIBS += -L$$OUT_PWD/../qtwaitingspinner/ -lqtwaitingspinner
+
+INCLUDEPATH += $$PWD/../qtwaitingspinner
+DEPENDPATH += $$PWD/../qtwaitingspinner
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qtwaitingspinner/release/libqtwaitingspinner.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qtwaitingspinner/debug/libqtwaitingspinner.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qtwaitingspinner/release/qtwaitingspinner.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../qtwaitingspinner/debug/qtwaitingspinner.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../qtwaitingspinner/libqtwaitingspinner.a

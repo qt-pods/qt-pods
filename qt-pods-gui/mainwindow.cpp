@@ -121,6 +121,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::stdOutActivated(int fileDescriptor) {
+#ifdef Q_OS_UNIX
     char readBuffer[1024];
     int numberOfBytesRead = ::read(fileDescriptor, readBuffer, sizeof(readBuffer) - 1);
     if(numberOfBytesRead > 0) {
@@ -133,6 +134,7 @@ void MainWindow::stdOutActivated(int fileDescriptor) {
         statusBar()->showMessage(readBuffer);
 #endif
     }
+#endif
 }
 
 void MainWindow::updateBuildInfo() {
