@@ -2,11 +2,6 @@
 
 [![Build status](https://travis-ci.org/qt-pods/qt-pods.svg?branch=master)](https://travis-ci.org/qt-pods/qt-pods)
 
-Support this and other free software projects of mine by donating bitcoins:
-```cpp
-1Hk5EkcZRaio4uGXSU453E1bNFTecsZEpt
-```
-
 ## qt-pods ([http://www.qt-pods.org](http://www.qt-pods.org))
 
 ![Screenshot](https://github.com/cybercatalyst/qt-pods/blob/master/screenshot.png "Screenshot")
