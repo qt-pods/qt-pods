@@ -3,7 +3,7 @@
 [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](https://gitter.im/qt-pods)
 
 
-## qt-pods ([http://www.qt-pods.org](http://www.qt-pods.org))
+## qt-pods
 
 See the video that demonstrates how easy it is to embed foreign code and write a complete code with auxiliary functions in less than five minutes.
 
