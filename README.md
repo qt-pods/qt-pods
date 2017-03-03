@@ -1,4 +1,6 @@
-[![Qt Pods](http://qt-pods.org/assets/logo.png "Qt Pods")](http://qt-pods.org)    
+## Important
+Recently, the pods master source has changed to http://omg-it.works/pods.json because the qt-pods.org has been cancelled. Either pull a newer version of qt-pods or change your pods sources to point to this file.
+
 [![Build status](https://travis-ci.org/qt-pods/qt-pods.svg?branch=master)](https://travis-ci.org/qt-pods/qt-pods)   
 [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](https://gitter.im/qt-pods)
 
@@ -23,10 +25,6 @@ it with other developers.
 ```
 qtpods-dev@googlegroups.com
 ```
-
-## Prebuild preview
-* Ubuntu 14.04: http://qt-pods.org/downloads/qt-pods-gui_0.1-ubuntu_amd64.deb
-* MacOSX Yosemite: http://qt-pods.org/downloads/qtpods-macosx-76d1de6-release.zip
 
 ## How to build
 Clone repository recursively:
