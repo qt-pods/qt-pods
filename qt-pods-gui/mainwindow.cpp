@@ -368,7 +368,7 @@ void MainWindow::on_pushButtonManageSources_clicked() {
 
     // At least add one source
     if(sources.isEmpty()) {
-        sources << "http://qt-pods.org/pods.json";
+        sources << "http://omg-it.works/pods.json";
     }
     sourcesDialog.setSources(sources);
 
@@ -712,7 +712,7 @@ void MainWindow::refreshAvailablePods() {
 
     QStringList sources = _settings->value("sources").toStringList();
     if(sources.isEmpty()) {
-        sources << "http://qt-pods.org/pods.json";
+        sources << "http://omg-it.works/pods.json";
     }
 
     metaObject()->invokeMethod(_podManager, "listAvailablePods", Q_ARG(QStringList, sources));
