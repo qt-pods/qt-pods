@@ -6,7 +6,7 @@
 
 See the video that demonstrates how easy it is to embed foreign code and write a complete code with auxiliary functions in less than five minutes.
 
-[![Example video](https://img.youtube.com/vi/vKTSL6t72us/0.jpg)](https://www.youtube.com/watch?v=vKTSL6t72us)
+[![Example video](https://img.youtube.com/vi/P-gA5g9ZP9I/0.jpg)](https://www.youtube.com/watch?v=P-gA5g9ZP9I)
 
 qt-pods is an attempt to unify the packaging of fragments of Qt sources.
 Inspired by the cocoapods project, each "pod" follows a strict rule of how
