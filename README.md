@@ -1,6 +1,3 @@
-## Important
-Recently, the pods master source has changed to http://omg-it.works/pods.json because the qt-pods.org has been cancelled. Either pull a newer version of qt-pods or change your pods sources to point to this file.
-
 [![Build status](https://travis-ci.org/qt-pods/qt-pods.svg?branch=master)](https://travis-ci.org/qt-pods/qt-pods)   
 [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](https://gitter.im/qt-pods)
 
@@ -29,7 +26,7 @@ qtpods-dev@googlegroups.com
 ## How to build
 Clone repository recursively:
 ```
-git clone --recursive https://github.com/cybercatalyst/qt-pods.git
+git clone --recursive git@github.com:qt-pods/qt-pods.git
 ```
 Then run:
 ```
